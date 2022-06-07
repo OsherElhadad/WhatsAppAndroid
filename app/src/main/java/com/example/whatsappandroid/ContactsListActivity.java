@@ -5,15 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.ListView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
 public class ContactsListActivity extends AppCompatActivity {
     private ListView listView;
     private ContactListAdapter adapter;
-    private com.google.android.material.floatingactionbutton.FloatingActionButton btnAddContact;
+    private FloatingActionButton btnAddContact;
 
     @SuppressLint("WrongViewCast")
     @Override
