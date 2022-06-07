@@ -3,4 +3,8 @@
     <string name="name_input_login">Name</string>
     <string name="password_input_login">Password</string>
     <string name="login_button_login">Login</string>
+    <string name="username_input_addContact">Username</string>
+    <string name="nickname_input_addContact">Nickname</string>
+    <string name="add_input_addContact">Add</string>
+    <string name="server_input_addContact">Server</string>
 </resources>
