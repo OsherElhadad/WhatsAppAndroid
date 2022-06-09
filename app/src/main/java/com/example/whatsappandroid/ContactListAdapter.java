@@ -32,9 +32,9 @@ public class ContactListAdapter extends ArrayAdapter<ContactWithMessages> {
             convertView = inflater.inflate(R.layout.activity_contact, parent, false);
         }
 
-        ImageView imageView = convertView.findViewById(R.id.profile_image);
-        TextView userName = convertView.findViewById(R.id.user_name);
-        TextView lastMsg = convertView.findViewById(R.id.last_massage);
+        ImageView imageView = convertView.findViewById(R.id.profile_image_contact);
+        TextView userName = convertView.findViewById(R.id.user_name_contact);
+        TextView lastMsg = convertView.findViewById(R.id.last_massage_contact);
         TextView time = convertView.findViewById(R.id.time);
 
         imageView.setImageResource(c.getPictureId());

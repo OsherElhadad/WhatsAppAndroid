@@ -6,6 +6,8 @@ import androidx.room.Room;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.whatsappandroid.ContactListAdapter;
@@ -34,7 +36,7 @@ public class ContactsListActivity extends AppCompatActivity {
 
         Intent currentIntent = getIntent();
         Bundle props = currentIntent.getExtras();
-        String currentUsername = (String) props.get("myUsername");
+        String currentUsername = props.get("myUsername").toString();
 
         appDB = Room.databaseBuilder(getApplicationContext(),
                 AppDB.class, currentUsername).allowMainThreadQueries().build();
@@ -55,6 +57,14 @@ public class ContactsListActivity extends AppCompatActivity {
 
         listView.setAdapter(adapter);
         listView.setClickable(true);
+
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            Intent chatIntent = new Intent(getApplicationContext(), ChatActivity.class);
+
+            ContactWithMessages contact = contacts.get((int) id);
+            chatIntent.putExtra("contactNickname", contact.getName());
+            startActivity(chatIntent);
+        });
     }
 
     @Override
