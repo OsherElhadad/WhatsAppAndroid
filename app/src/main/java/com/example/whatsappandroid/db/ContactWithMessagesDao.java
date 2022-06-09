@@ -1,4 +1,4 @@
-package com.example.whatsappandroid;
+package com.example.whatsappandroid.db;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -6,6 +6,9 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
+
+import com.example.whatsappandroid.ContactWithMessages;
+import com.example.whatsappandroid.entities.Contact;
 
 import java.util.List;
 

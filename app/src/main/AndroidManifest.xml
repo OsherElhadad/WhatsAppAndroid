@@ -25,19 +25,19 @@
         android:theme="@style/AppTheme.NoActionBar"
         tools:targetApi="31">
         <activity
-            android:name=".RegisterActivity"
+            android:name=".activities.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".AddContactActivity"
+            android:name=".activities.AddContactActivity"
             android:exported="false" />
         <activity
-            android:name=".ContactActivity"
+            android:name=".activities.ContactActivity"
             android:exported="false" />
         <activity
-            android:name=".ContactsListActivity"
+            android:name=".activities.ContactsListActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".activities.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

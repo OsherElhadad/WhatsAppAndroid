@@ -3,16 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/osher/AndroidStudioProjects/WhatsAppAndroid/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1" />
         <entry key="..\:/Users/osher/AndroidStudioProjects/WhatsAppAndroid/app/src/main/res/drawable/custom_button.xml" value="0.2265" />
         <entry key="..\:/Users/osher/AndroidStudioProjects/WhatsAppAndroid/app/src/main/res/drawable/gradient_background.xml" value="0.2265" />
         <entry key="..\:/Users/osher/AndroidStudioProjects/WhatsAppAndroid/app/src/main/res/drawable/gradient_box_background.xml" value="0.2265" />
-        <entry key="..\:/Users/osher/AndroidStudioProjects/WhatsAppAndroid/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
-        <entry key="..\:/Users/osher/AndroidStudioProjects/WhatsAppAndroid/app/src/main/res/layout/activity_add_contact.xml" value="0.21240942028985507" />
-        <entry key="..\:/Users/osher/AndroidStudioProjects/WhatsAppAndroid/app/src/main/res/layout/activity_contact.xml" value="0.21240942028985507" />
-        <entry key="..\:/Users/osher/AndroidStudioProjects/WhatsAppAndroid/app/src/main/res/layout/activity_contacts_list.xml" value="0.21240942028985507" />
         <entry key="..\:/Users/osher/AndroidStudioProjects/WhatsAppAndroid/app/src/main/res/layout/activity_main.xml" value="0.25" />
-        <entry key="..\:/Users/osher/AndroidStudioProjects/WhatsAppAndroid/app/src/main/res/layout/activity_register.xml" value="0.21240942028985507" />
         <entry key="..\:/WhatsAppAndroid-Ex3/WhatsAppAndroid/app/src/main/res/drawable-anydpi/ic_action_name.xml" value="0.1" />
         <entry key="..\:/WhatsAppAndroid-Ex3/WhatsAppAndroid/app/src/main/res/drawable-anydpi/ic_add_person.xml" value="0.1" />
         <entry key="..\:/WhatsAppAndroid-Ex3/WhatsAppAndroid/app/src/main/res/drawable/custom_button.xml" value="0.14" />
@@ -20,6 +14,7 @@
         <entry key="..\:/WhatsAppAndroid-Ex3/WhatsAppAndroid/app/src/main/res/layout/activity_add_contact.xml" value="0.1983695652173913" />
         <entry key="..\:/WhatsAppAndroid-Ex3/WhatsAppAndroid/app/src/main/res/layout/activity_contact.xml" value="0.33" />
         <entry key="..\:/WhatsAppAndroid-Ex3/WhatsAppAndroid/app/src/main/res/layout/activity_contacts_list.xml" value="0.20871327254305977" />
+        <entry key="..\:/WhatsAppAndroid-Ex3/WhatsAppAndroid/app/src/main/res/layout/activity_login.xml" value="0.23052536231884058" />
         <entry key="..\:/WhatsAppAndroid-Ex3/WhatsAppAndroid/app/src/main/res/layout/activity_main.xml" value="0.14722222222222223" />
       </map>
     </option>

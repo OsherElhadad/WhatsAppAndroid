@@ -1,4 +1,4 @@
-package com.example.whatsappandroid;
+package com.example.whatsappandroid.activities;
 
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.whatsappandroid.R;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
