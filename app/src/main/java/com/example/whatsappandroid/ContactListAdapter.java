@@ -12,11 +12,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class ContactListAdapter extends ArrayAdapter<Contact> {
+public class ContactListAdapter extends ArrayAdapter<ContactWithMessages> {
     private LayoutInflater inflater;
 
-    public ContactListAdapter(Context ctx, ArrayList<Contact> contactArrayList) {
+    public ContactListAdapter(Context ctx, List<ContactWithMessages> contactArrayList) {
         super(ctx, R.layout.activity_contacts_list, contactArrayList);
 
         this.inflater = LayoutInflater.from(ctx);
@@ -26,7 +27,7 @@ public class ContactListAdapter extends ArrayAdapter<Contact> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-        Contact c = getItem(position);
+        ContactWithMessages c = getItem(position);
 
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.activity_contact, parent, false);
@@ -38,9 +39,9 @@ public class ContactListAdapter extends ArrayAdapter<Contact> {
         TextView time = convertView.findViewById(R.id.time);
 
         imageView.setImageResource(c.getPictureId());
-        userName.setText(c.getUserName());
-        lastMsg.setText(c.getLastMassage());
-        time.setText(c.getLastMassageSendingTime());
+        userName.setText(c.getName());
+        lastMsg.setText(c.getLast());
+        time.setText(c.getLastdate());
 
         return convertView;
     }

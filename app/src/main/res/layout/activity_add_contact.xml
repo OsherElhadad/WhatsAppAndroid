@@ -36,7 +36,6 @@
             android:layout_marginVertical="10dp"
             android:ems="10"
             android:hint="@string/nickname_input_addContact"
-            android:inputType="textPassword"
             android:minHeight="48dp" />
 
         <EditText
@@ -47,11 +46,10 @@
             android:layout_marginVertical="10dp"
             android:ems="10"
             android:hint="@string/server_input_addContact"
-            android:inputType="textPassword"
             android:minHeight="48dp" />
 
         <Button
-            android:id="@+id/LoginButton"
+            android:id="@+id/btnAddContact"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

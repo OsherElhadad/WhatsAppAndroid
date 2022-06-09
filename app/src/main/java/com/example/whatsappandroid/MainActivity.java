@@ -1,14 +1,16 @@
 package com.example.whatsappandroid;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button loginBtn;
+    private Button loginBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,8 +22,10 @@ public class MainActivity extends AppCompatActivity {
         loginBtn.setOnClickListener(v -> {
             Intent contactsListIntent = new Intent(this, ContactsListActivity.class);
 
+            EditText usernameET = findViewById(R.id.editTextTextPersonName);
+
             // pass username to the contacts list screen
-            contactsListIntent.putExtra("username", "hardcodedUser");
+            contactsListIntent.putExtra("myUsername", usernameET.getText().toString());
             startActivity(contactsListIntent);
         });
     }

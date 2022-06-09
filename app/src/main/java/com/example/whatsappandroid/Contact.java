@@ -1,38 +1,100 @@
 package com.example.whatsappandroid;
 
-public class Contact {
-    private String userName;
-    private int pictureId;
-    private String lastMassage;
-    private String lastMassageSendingTime;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
-    public Contact(String userName, int pictureId, String lastMassage, String lastMassageSendingTime) {
-        this.userName = userName;
-        this.pictureId = pictureId;
-        this.lastMassage = lastMassage;
-        this.lastMassageSendingTime = lastMassageSendingTime;
+import java.util.ArrayList;
+
+@Entity
+public class Contact {
+
+    @PrimaryKey(autoGenerate = true)
+    private int contactId;
+    private String name;
+    private String server;
+    private int pictureId;
+    private String last;
+    private String lastdate;
+    private String userId;
+
+    public void setContactId(int contactId) {
+        this.contactId = contactId;
     }
 
-    public Contact(String userName ,String lastMassage, String lastMassageSendingTime) {
-        this.userName = userName;
+    public void setName(String name) {
+        this.name = name;
+    }
 
-        this.lastMassage = lastMassage;
-        this.lastMassageSendingTime = lastMassageSendingTime;
+    public void setServer(String server) {
+        this.server = server;
+    }
+
+    public void setPictureId(int pictureId) {
+        this.pictureId = pictureId;
+    }
+
+    public void setLast(String last) {
+        this.last = last;
+    }
+
+    public void setLastdate(String lastdate) {
+        this.lastdate = lastdate;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public Contact() {
+        this.name = null;
+        this.server = null;
+        this.last = null;
+        this.lastdate = null;
+        this.userId = null;
+    }
+
+    public Contact(String name, int pictureId, String last, String lastMassageSendingTime) {
+        this.name = name;
+        this.pictureId = pictureId;
+        this.last = last;
+        this.lastdate = lastMassageSendingTime;
+    }
+
+    public Contact(String name, String server, String last, String lastMassageSendingTime, String userId) {
+        this.name = name;
+        this.server = server;
+        this.last = last;
+        this.lastdate = lastMassageSendingTime;
+        this.userId = userId;
+    }
+
+    public int getContactId() {
+        return this.contactId;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getServer() {
+        return this.server;
     }
 
     public int getPictureId() {
-        return pictureId;
+        return this.pictureId;
     }
 
-    public String getLastMassage() {
-        return lastMassage;
+    public String getLast() {
+        return this.last;
     }
 
-    public String getLastMassageSendingTime() {
-        return lastMassageSendingTime;
+    public String getLastdate() {
+        return this.lastdate;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUserId() {
+        return this.userId;
     }
+
+
 }
