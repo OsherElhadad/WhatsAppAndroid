@@ -1,0 +1,111 @@
+package com.example.whatsappandroid;
+
+import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.widget.Button;
+import android.widget.ImageView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class RegisterActivity extends AppCompatActivity {
+    ImageView viewImage;
+    Button b;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_register);
+        b = findViewById(R.id.btnSelectPhoto);
+        viewImage = findViewById(R.id.viewImageProfilePhoto);
+        b.setOnClickListener(v -> selectImage());
+    }
+
+    private void selectImage() {
+        final CharSequence[] options = {"Take Photo", "Choose from Gallery", "Cancel"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+        builder.setTitle("Add Photo");
+        builder.setItems(options, (dialog, item) -> {
+            if (options[item].equals("Take Photo")) {
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                try {
+//                    File f = new File(Environment.getExternalStorageDirectory(), "temp.jpg");
+//                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+                    startActivityForResult(takePictureIntent, 1);
+                } catch (ActivityNotFoundException e) {
+                    // display error state to the user
+                }
+            } else if (options[item].equals("Choose from Gallery")) {
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intent.setType("image/*");
+                startActivityForResult(intent, 2);
+            } else if (options[item].equals("Cancel")) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == 1) {
+//                File f = new File(Environment.getExternalStorageDirectory().toString());
+//                for (File temp : f.listFiles()) {
+//                    if (temp.getName().equals("temp.jpg")) {
+//                        f = temp;
+//                        break;
+//                    }
+//                }
+//                try {
+//                    Bitmap bitmap;
+//                    BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+//                    bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(),
+//                            bitmapOptions);
+//                    viewImage.setImageBitmap(bitmap);
+//                    String path = android.os.Environment
+//                            .getExternalStorageDirectory()
+//                            + File.separator
+//                            + "Phoenix" + File.separator + "default";
+//                    f.delete();
+//                    OutputStream outFile;
+//                    File file = new File(path, String.valueOf(System.currentTimeMillis()) + ".jpg");
+//                    try {
+//                        outFile = new FileOutputStream(file);
+//                        bitmap.compress(Bitmap.CompressFormat.JPEG, 85, outFile);
+//                        outFile.flush();
+//                        outFile.close();
+//                    } catch (FileNotFoundException e) {
+//                        e.printStackTrace();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                viewImage.setImageBitmap(imageBitmap);
+            } else if (requestCode == 2) {
+                Uri selectedImage = data.getData();
+                String[] filePath = {MediaStore.Images.Media.DATA};
+                Cursor c = getContentResolver().query(selectedImage, filePath, null, null, null);
+                c.moveToFirst();
+                int columnIndex = c.getColumnIndex(filePath[0]);
+                String picturePath = c.getString(columnIndex);
+                c.close();
+                Bitmap thumbnail = (BitmapFactory.decodeFile(picturePath));
+                viewImage.setImageBitmap(thumbnail);
+            }
+        }
+    }
+}
