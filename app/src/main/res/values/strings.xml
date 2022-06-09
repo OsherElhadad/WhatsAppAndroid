@@ -1,10 +1,14 @@
 <resources>
     <string name="app_name">WhatsAppAndroid</string>
-    <string name="name_input_login">Name</string>
-    <string name="password_input_login">Password</string>
-    <string name="login_button_login">Login</string>
-    <string name="username_input_addContact">Username</string>
-    <string name="nickname_input_addContact">Nickname</string>
-    <string name="add_input_addContact">Add</string>
-    <string name="server_input_addContact">Server</string>
+    <string name="username_input">Username</string>
+    <string name="password_input">Password</string>
+    <string name="repeat_password_input">Repeat password</string>
+    <string name="login_button">Login</string>
+    <string name="nickname_input">Nickname</string>
+    <string name="add_input">Add</string>
+    <string name="server_input">Server</string>
+    <string name="register_button">Register</string>
+    <string name="go_to_login">Already registered? Login now</string>
+    <string name="go_to_register">Not registered yet? Register now</string>
+    <string name="select_photo">Select Photo</string>
 </resources>
