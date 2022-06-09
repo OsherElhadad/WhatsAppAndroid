@@ -6,15 +6,14 @@ import androidx.room.Room;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.example.whatsappandroid.ContactListAdapter;
+import com.example.whatsappandroid.adapters.ContactListAdapter;
 import com.example.whatsappandroid.ContactWithMessages;
 import com.example.whatsappandroid.R;
 import com.example.whatsappandroid.db.AppDB;
 import com.example.whatsappandroid.db.ContactWithMessagesDao;
+import com.example.whatsappandroid.entities.Contact;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
@@ -61,7 +60,7 @@ public class ContactsListActivity extends AppCompatActivity {
         listView.setOnItemClickListener((parent, view, position, id) -> {
             Intent chatIntent = new Intent(getApplicationContext(), ChatActivity.class);
 
-            ContactWithMessages contact = contacts.get((int) id);
+            Contact contact = contacts.get((int) id).contact;
             chatIntent.putExtra("contactNickname", contact.getName());
             startActivity(chatIntent);
         });

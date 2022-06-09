@@ -1,4 +1,4 @@
-package com.example.whatsappandroid;
+package com.example.whatsappandroid.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +10,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.example.whatsappandroid.ContactWithMessages;
+import com.example.whatsappandroid.R;
 
 import java.util.List;
 
@@ -37,10 +40,10 @@ public class ContactListAdapter extends ArrayAdapter<ContactWithMessages> {
         TextView lastMsg = convertView.findViewById(R.id.last_massage_contact);
         TextView time = convertView.findViewById(R.id.time);
 
-        imageView.setImageResource(c.getPictureId());
-        userName.setText(c.getName());
-        lastMsg.setText(c.getLast());
-        time.setText(c.getLastdate());
+        imageView.setImageResource(c.contact.getPictureId());
+        userName.setText(c.contact.getName());
+        lastMsg.setText(c.contact.getLast());
+        time.setText(c.contact.getLastdate());
 
         return convertView;
     }
