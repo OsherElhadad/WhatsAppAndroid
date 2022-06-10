@@ -1,16 +1,18 @@
 package com.example.whatsappandroid.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ListView;
 
-import com.example.whatsappandroid.adapters.ContactListAdapter;
+import com.example.whatsappandroid.listeners.OnItemClickListener;
 import com.example.whatsappandroid.ContactWithMessages;
 import com.example.whatsappandroid.R;
+import com.example.whatsappandroid.adapters.ContactListAdapter2;
 import com.example.whatsappandroid.db.AppDB;
 import com.example.whatsappandroid.db.ContactWithMessagesDao;
 import com.example.whatsappandroid.entities.Contact;
@@ -19,8 +21,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.List;
 
 public class ContactsListActivity extends AppCompatActivity {
-    private ListView listView;
-    private ContactListAdapter adapter;
+    private RecyclerView listView;
+    private ContactListAdapter2 adapter;
     private FloatingActionButton btnAddContact;
     private AppDB appDB;
     private ContactWithMessagesDao contactDao;
@@ -52,18 +54,17 @@ public class ContactsListActivity extends AppCompatActivity {
         contacts = contactDao.getContactsWithMessages();
 
         listView = findViewById(R.id.lvContacts);
-        adapter = new ContactListAdapter(getApplicationContext(), contacts);
+        listView.setLayoutManager(new LinearLayoutManager(this));
 
+        adapter = new ContactListAdapter2(getApplicationContext(), contact -> {
+            Intent chatIntent = new Intent(getApplicationContext(), ChatActivity.class);
+            chatIntent.putExtra("contactNickname", contact.contact.getName());
+            startActivity(chatIntent);
+        });
+        adapter.setContactsList(contacts);
         listView.setAdapter(adapter);
         listView.setClickable(true);
 
-        listView.setOnItemClickListener((parent, view, position, id) -> {
-            Intent chatIntent = new Intent(getApplicationContext(), ChatActivity.class);
-
-            Contact contact = contacts.get((int) id).contact;
-            chatIntent.putExtra("contactNickname", contact.getName());
-            startActivity(chatIntent);
-        });
     }
 
     @Override
@@ -71,6 +72,7 @@ public class ContactsListActivity extends AppCompatActivity {
         super.onResume();
         contacts.clear();
         contacts.addAll(contactDao.getContactsWithMessages());
+        adapter.setContactsList(contacts);
         adapter.notifyDataSetChanged();
     }
 }
