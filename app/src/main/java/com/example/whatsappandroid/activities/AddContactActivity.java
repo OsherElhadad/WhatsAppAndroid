@@ -13,20 +13,17 @@ import com.example.whatsappandroid.db.AppDB;
 import com.example.whatsappandroid.db.ContactWithMessagesDao;
 import com.example.whatsappandroid.models.Contact;
 import com.example.whatsappandroid.utilities.Info;
+import com.example.whatsappandroid.viewModels.ContactsViewModel;
 
 public class AddContactActivity extends AppCompatActivity {
-    private AppDB appDB;
-    private ContactWithMessagesDao contactDao;
+
     private Button btnAddContact;
+    private ContactsViewModel contactsViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_contact);
-
-        appDB = Room.databaseBuilder(getApplicationContext(),
-                AppDB.class, Info.loggedUser).allowMainThreadQueries().build();
-        contactDao = appDB.contactDao();
 
         btnAddContact = findViewById(R.id.btnAddContact);
         btnAddContact.setOnClickListener(v -> {
@@ -46,7 +43,8 @@ public class AddContactActivity extends AppCompatActivity {
             Contact newContact = new Contact(contactName, contactServer, null,
                     null, Info.loggedUser);
 
-            contactDao.insert(newContact);
+            contactsViewModel = new ContactsViewModel();
+            contactsViewModel.add(newContact);
 
             finish();
         });
