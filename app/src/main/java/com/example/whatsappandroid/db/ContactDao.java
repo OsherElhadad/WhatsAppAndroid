@@ -6,7 +6,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.example.whatsappandroid.entities.Contact;
+import com.example.whatsappandroid.models.Contact;
 
 import java.util.List;
 

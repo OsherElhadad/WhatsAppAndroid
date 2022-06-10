@@ -1,9 +1,7 @@
-package com.example.whatsappandroid.entities;
+package com.example.whatsappandroid.models;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
-import java.util.ArrayList;
 
 @Entity
 public class Contact {

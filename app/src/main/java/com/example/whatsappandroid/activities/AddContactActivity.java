@@ -11,7 +11,8 @@ import android.widget.EditText;
 import com.example.whatsappandroid.R;
 import com.example.whatsappandroid.db.AppDB;
 import com.example.whatsappandroid.db.ContactWithMessagesDao;
-import com.example.whatsappandroid.entities.Contact;
+import com.example.whatsappandroid.models.Contact;
+import com.example.whatsappandroid.utilities.Info;
 
 public class AddContactActivity extends AppCompatActivity {
     private AppDB appDB;
@@ -23,13 +24,8 @@ public class AddContactActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_contact);
 
-        Intent currentIntent = getIntent();
-        Bundle props = currentIntent.getExtras();
-
-        String myUsername = props.get("myUsername").toString();
-
         appDB = Room.databaseBuilder(getApplicationContext(),
-                AppDB.class, myUsername).allowMainThreadQueries().build();
+                AppDB.class, Info.loggedUser).allowMainThreadQueries().build();
         contactDao = appDB.contactDao();
 
         btnAddContact = findViewById(R.id.btnAddContact);
@@ -48,7 +44,7 @@ public class AddContactActivity extends AppCompatActivity {
 
 
             Contact newContact = new Contact(contactName, contactServer, null,
-                    null, myUsername);
+                    null, Info.loggedUser);
 
             contactDao.insert(newContact);
 

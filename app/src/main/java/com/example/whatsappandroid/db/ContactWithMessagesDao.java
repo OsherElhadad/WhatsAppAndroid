@@ -7,8 +7,8 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
-import com.example.whatsappandroid.ContactWithMessages;
-import com.example.whatsappandroid.entities.Contact;
+import com.example.whatsappandroid.models.ContactWithMessages;
+import com.example.whatsappandroid.models.Contact;
 
 import java.util.List;
 

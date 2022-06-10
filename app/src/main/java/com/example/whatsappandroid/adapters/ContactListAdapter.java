@@ -4,47 +4,75 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import com.example.whatsappandroid.ContactWithMessages;
+import androidx.recyclerview.widget.RecyclerView;
+import com.example.whatsappandroid.models.ContactWithMessages;
+import com.example.whatsappandroid.listeners.OnItemClickListener;
 import com.example.whatsappandroid.R;
-
 import java.util.List;
 
-public class ContactListAdapter extends ArrayAdapter<ContactWithMessages> {
+
+public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ViewHolder> {
+
     private LayoutInflater inflater;
+    private List<ContactWithMessages> contacts;
+    private OnItemClickListener listener;
 
-    public ContactListAdapter(Context ctx, List<ContactWithMessages> contactArrayList) {
-        super(ctx, R.layout.activity_contacts_list, contactArrayList);
+    /**
+     * Provide a reference to the type of views that you are using
+     * (custom ViewHolder).
+     */
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        private final ImageView imageView;
+        private final TextView userName;
+        private final TextView lastMsg;
+        private final TextView time;
 
-        this.inflater = LayoutInflater.from(ctx);
+        public ViewHolder(View view) {
+            super(view);
+
+            imageView = view.findViewById(R.id.profile_image_contact);
+            userName = view.findViewById(R.id.user_name_contact);
+            lastMsg = view.findViewById(R.id.last_massage_contact);
+            time = view.findViewById(R.id.time);
+        }
     }
 
-    @NonNull
+    public ContactListAdapter(Context context, OnItemClickListener listener) {
+        this.inflater = LayoutInflater.from(context);
+        this.listener = listener;
+    }
+
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        View view = this.inflater.inflate(R.layout.activity_contact, viewGroup, false);
+        return new ViewHolder(view);
+    }
 
-        ContactWithMessages c = getItem(position);
-
-        if (convertView == null) {
-            convertView = inflater.inflate(R.layout.activity_contact, parent, false);
+    @Override
+    public void onBindViewHolder(ViewHolder viewHolder, final int position) {
+        if (this.contacts != null) {
+            viewHolder.imageView.setImageResource(contacts.get(position).contact.getPictureId());
+            viewHolder.userName.setText(contacts.get(position).contact.getName());
+            viewHolder.lastMsg.setText(contacts.get(position).contact.getLast());
+            viewHolder.time.setText(contacts.get(position).contact.getLastdate());
+            viewHolder.itemView.setOnClickListener(view -> {
+                listener.onItemClick(contacts.get(position));
+            });
         }
+    }
 
-        ImageView imageView = convertView.findViewById(R.id.profile_image_contact);
-        TextView userName = convertView.findViewById(R.id.user_name_contact);
-        TextView lastMsg = convertView.findViewById(R.id.last_massage_contact);
-        TextView time = convertView.findViewById(R.id.time);
+    // Return the size of your dataset (invoked by the layout manager)
+    @Override
+    public int getItemCount() {
+        if (this.contacts == null)
+            return 0;
+        return this.contacts.size();
+    }
 
-        imageView.setImageResource(c.contact.getPictureId());
-        userName.setText(c.contact.getName());
-        lastMsg.setText(c.contact.getLast());
-        time.setText(c.contact.getLastdate());
-
-        return convertView;
+    public void setContactsList(List<ContactWithMessages> newContacts) {
+        this.contacts = newContacts;
+        notifyDataSetChanged();
     }
 }

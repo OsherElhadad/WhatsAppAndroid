@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.example.whatsappandroid.R;
+import com.example.whatsappandroid.utilities.Info;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -28,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
             EditText usernameET = findViewById(R.id.editTextTextUserNameLogin);
 
             // pass username to the contacts list screen
-            contactsListIntent.putExtra("myUsername", usernameET.getText().toString());
+            Info.loggedUser = usernameET.getText().toString();
             startActivity(contactsListIntent);
         });
 

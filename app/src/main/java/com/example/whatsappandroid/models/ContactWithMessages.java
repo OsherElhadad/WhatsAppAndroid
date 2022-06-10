@@ -1,10 +1,10 @@
-package com.example.whatsappandroid;
+package com.example.whatsappandroid.models;
 
 import androidx.room.Embedded;
 import androidx.room.Relation;
 
-import com.example.whatsappandroid.entities.Contact;
-import com.example.whatsappandroid.entities.Message;
+import com.example.whatsappandroid.models.Contact;
+import com.example.whatsappandroid.models.Message;
 
 import java.util.List;
 
