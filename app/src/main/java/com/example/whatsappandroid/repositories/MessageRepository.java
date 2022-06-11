@@ -7,10 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.room.Room;
 
 import com.example.whatsappandroid.db.AppDB;
-import com.example.whatsappandroid.db.ContactWithMessagesDao;
 import com.example.whatsappandroid.db.MessageDao;
-import com.example.whatsappandroid.models.Contact;
-import com.example.whatsappandroid.models.ContactWithMessages;
 import com.example.whatsappandroid.models.Message;
 import com.example.whatsappandroid.utilities.Info;
 
@@ -22,7 +19,7 @@ public class MessageRepository {
 
     public MessageRepository() {
         AppDB appDB = Room.databaseBuilder(Info.context, AppDB.class, Info.loggedUser)
-                .allowMainThreadQueries().build();
+                .allowMainThreadQueries().fallbackToDestructiveMigration().build();
         this.messageDao = appDB.messageDao();
         this.messagesListData = new ContactListData();
     }
@@ -30,7 +27,7 @@ public class MessageRepository {
     class ContactListData extends MutableLiveData<List<Message>> {
         public ContactListData() {
             super();
-            setValue(messageDao.index());
+            setValue(messageDao.getChatMessages(Info.loggedUser, Info.contactId));
         }
 
         @Override
@@ -38,7 +35,8 @@ public class MessageRepository {
             super.onActive();
 
             new Thread(() -> {
-                messagesListData.postValue(messageDao.index());
+                messagesListData.postValue(messageDao
+                        .getChatMessages(Info.loggedUser, Info.contactId));
             }).start();
         }
     }
@@ -56,14 +54,14 @@ public class MessageRepository {
     }
 
     public void reload() {
-        new GetContactsTask(messagesListData, messageDao).execute();
+        new GetMessagesTask(messagesListData, messageDao).execute();
     }
 
-    public class GetContactsTask extends AsyncTask<Void, Void, Void> {
+    public class GetMessagesTask extends AsyncTask<Void, Void, Void> {
         private MutableLiveData<List<Message>> messagesListData;
         private MessageDao messageDao;
 
-        public GetContactsTask(MutableLiveData<List<Message>> messagesListData,
+        public GetMessagesTask(MutableLiveData<List<Message>> messagesListData,
                                MessageDao messageDao) {
             this.messageDao = messageDao;
             this.messagesListData = messagesListData;

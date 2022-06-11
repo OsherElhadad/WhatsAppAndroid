@@ -25,28 +25,38 @@ public class ContactsListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts_list);
-
         contactsViewModel = new ContactsViewModel();
-        btnAddContact = findViewById(R.id.btnAddContact);
-        listView = findViewById(R.id.lvContacts);
+        setAddContactBtn();
+        setAdapter();
+        setContactList();
+    }
 
+    private void setAddContactBtn() {
+        btnAddContact = findViewById(R.id.btnAddContact);
         btnAddContact.setOnClickListener(v -> {
             Intent addContactIntent = new Intent(this, AddContactActivity.class);
             startActivity(addContactIntent);
         });
+    }
 
-        listView.setLayoutManager(new LinearLayoutManager(this));
-
+    private void setAdapter() {
         adapter = new ContactListAdapter(getApplicationContext(), contact -> {
             Intent chatIntent = new Intent(Info.context, ChatActivity.class);
+            Info.contactId = contact.contact.getContactId();
             chatIntent.putExtra("contactNickname", contact.contact.getName());
             startActivity(chatIntent);
         });
+    }
 
+    private void setContactList() {
+        listView = findViewById(R.id.lvContacts);
+        listView.setLayoutManager(new LinearLayoutManager(this));
         contactsViewModel.get().observe(this, contacts -> {
             adapter.setContactsList(contacts);
         });
         listView.setAdapter(adapter);
         listView.setClickable(true);
     }
+
+
 }

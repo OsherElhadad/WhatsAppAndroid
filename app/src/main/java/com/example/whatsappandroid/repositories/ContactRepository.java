@@ -23,7 +23,7 @@ public class ContactRepository {
 
     public ContactRepository() {
         AppDB appDB = Room.databaseBuilder(Info.context, AppDB.class, Info.loggedUser)
-                     .allowMainThreadQueries().build();
+                     .allowMainThreadQueries().fallbackToDestructiveMigration().build();
         this.contactDao = appDB.contactDao();
         this.contactListData = new ContactListData();
     }

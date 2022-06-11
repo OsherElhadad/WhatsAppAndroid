@@ -20,7 +20,7 @@ public interface MessageDao {
     Message get(int id);
 
     @Query("SELECT * FROM message WHERE userId = :userId AND contactId = :contactId")
-    Message getChatMessages(String userId, String contactId);
+    List<Message> getChatMessages(String userId, int contactId);
 
     @Insert
     void insert(Message... Messages);

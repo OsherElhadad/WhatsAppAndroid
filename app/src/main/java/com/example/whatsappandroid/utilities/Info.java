@@ -8,7 +8,7 @@ public class Info extends Application {
     @SuppressLint("StaticFieldLeak")
     public static Context context;
     public static String loggedUser;
-    public static String contactId;
+    public static int contactId;
 
     @Override
     public void onCreate() {
