@@ -41,9 +41,6 @@
             android:name=".activities.AddContactActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.ContactActivity"
-            android:exported="false" />
-        <activity
             android:name=".activities.ContactsListActivity"
             android:exported="false" />
         <activity

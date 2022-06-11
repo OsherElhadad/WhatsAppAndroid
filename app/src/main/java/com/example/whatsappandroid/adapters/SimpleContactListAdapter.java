@@ -32,7 +32,7 @@ public class SimpleContactListAdapter extends ArrayAdapter<ContactWithMessages> 
         ContactWithMessages c = getItem(position);
 
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.activity_contact, parent, false);
+            convertView = inflater.inflate(R.layout.contact, parent, false);
         }
 
         ImageView imageView = convertView.findViewById(R.id.profile_image_contact);

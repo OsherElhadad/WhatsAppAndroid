@@ -19,10 +19,6 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     private List<ContactWithMessages> contacts;
     private OnItemClickListener listener;
 
-    /**
-     * Provide a reference to the type of views that you are using
-     * (custom ViewHolder).
-     */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final ImageView imageView;
         private final TextView userName;
@@ -46,7 +42,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View view = this.inflater.inflate(R.layout.activity_contact, viewGroup, false);
+        View view = this.inflater.inflate(R.layout.contact, viewGroup, false);
         return new ViewHolder(view);
     }
 
