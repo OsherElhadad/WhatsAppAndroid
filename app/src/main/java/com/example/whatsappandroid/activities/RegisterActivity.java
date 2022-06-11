@@ -14,19 +14,31 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.example.whatsappandroid.R;
+import com.example.whatsappandroid.utilities.Info;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputLayout;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
-    ImageView viewImage;
-    Button b;
-    TextView tv;
+    private ImageView viewImage;
+    private Button b;
+    private Button register;
+    private TextView tv;
+    private FloatingActionButton login;
+    private TextInputLayout username;
+    private TextInputLayout nickname;
+    private TextInputLayout password;
+    private TextInputLayout repeatPassword;
+    private static final Pattern NAME_PATTERN = Pattern.compile("^[a-zA-Z0-9][a-zA-Z0-9]+$");
+    private static final Pattern PASSWORD_PATTERN = Pattern.compile("^[a-zA-Z0-9!@#$%^&*():/_-]" +
+                                                    "[a-zA-Z0-9!@#$%^&*():/_-]+$");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +47,39 @@ public class RegisterActivity extends AppCompatActivity {
         b = findViewById(R.id.btnSelectPhoto);
         viewImage = findViewById(R.id.viewImageProfilePhoto);
         tv = findViewById(R.id.textViewErrorImgRegister);
+        register = findViewById(R.id.RegisterButtonRegister);
+        register.setOnClickListener(v -> {
+            confirmInput();
+        });
+        username = findViewById(R.id.usernameRegister);
+        username.getEditText().setOnKeyListener((v, keyCode, event) -> {
+            validateUsername();
+            return false;
+        });
+        nickname = findViewById(R.id.nicknameRegister);
+        nickname.getEditText().setOnKeyListener((v, keyCode, event) -> {
+            validateNickname();
+            return false;
+        });
+        password = findViewById(R.id.passwordRegister);
+        password.getEditText().setOnKeyListener((v, keyCode, event) -> {
+            validatePassword();
+            return false;
+        });
+        repeatPassword = findViewById(R.id.repeatPasswordRegister);
+        repeatPassword.getEditText().setOnKeyListener((v, keyCode, event) -> {
+            validateRepeatPassword();
+            return false;
+        });
+
         b.setOnClickListener(v -> selectImage());
+
+        login = findViewById(R.id.btnToLogin);
+
+        login.setOnClickListener(v -> {
+            Intent loginIntent = new Intent(this, LoginActivity.class);
+            startActivity(loginIntent);
+        });
     }
 
     private void selectImage() {
@@ -120,15 +164,85 @@ public class RegisterActivity extends AppCompatActivity {
             }
         }
     }
-    public static boolean isValidPassword(final String password) {
 
-        Pattern pattern;
-        Matcher matcher;
-        final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{2,}$";
-        pattern = Pattern.compile(PASSWORD_PATTERN);
-        matcher = pattern.matcher(password);
+    private boolean validateUsername() {
+        String usernameInput = username.getEditText().getText().toString().trim();
+        if (usernameInput == null || usernameInput.length() == 0) {
+            username.setError("Username can not be empty");
+            return false;
+        }
 
-        return matcher.matches();
+        else if (!NAME_PATTERN.matcher(usernameInput).matches()) {
+            username.setError("Username must have at least 2 English/numbers chars");
+            return false;
+        } else {
+            username.setError(null);
+            return true;
+        }
+    }
 
+    private boolean validateNickname() {
+        String nicknameInput = nickname.getEditText().getText().toString().trim();
+        if (nicknameInput == null || nicknameInput.length() == 0) {
+            nickname.setError("Nickname can not be empty");
+            return false;
+        }
+
+        else if (!NAME_PATTERN.matcher(nicknameInput).matches()) {
+            nickname.setError("Nickname must have at least 2 English/numbers chars");
+            return false;
+        } else {
+            nickname.setError(null);
+            return true;
+        }
+    }
+
+    private boolean validatePassword() {
+        String passwordInput = password.getEditText().getText().toString().trim();
+        if (passwordInput == null || passwordInput.length() == 0) {
+            password.setError("Password can not be empty");
+            return false;
+        }
+
+        else if (!PASSWORD_PATTERN.matcher(passwordInput).matches()) {
+            password.setError("Password must have at least 2" +
+                    " English, numbers or special chars");
+            return false;
+        } else {
+            password.setError(null);
+            return true;
+        }
+    }
+
+    private boolean validateRepeatPassword() {
+        String repeatPasswordInput = repeatPassword.getEditText().getText().toString().trim();
+        String passwordInput = password.getEditText().getText().toString().trim();
+        if (repeatPasswordInput == null || repeatPasswordInput.length() == 0) {
+            repeatPassword.setError("Repeat password can not be empty");
+            return false;
+        }
+
+        else if (!passwordInput.equals(repeatPasswordInput)) {
+            repeatPassword.setError("Repeat password must be equal to Password");
+            return false;
+        } else {
+            repeatPassword.setError(null);
+            return true;
+        }
+    }
+
+    public void confirmInput() {
+        boolean valid = validateUsername() || validateNickname() ||
+                validatePassword() || validateRepeatPassword();
+        if (!valid) {
+            return;
+        }
+        String input = "Welcome " + username.getEditText().getText().toString().trim() + "!";
+        Toast.makeText(this, input, Toast.LENGTH_SHORT).show();
+        Intent contactsListIntent = new Intent(this, ContactsListActivity.class);
+
+        // pass username to the contacts list screen
+        Info.loggedUser = username.getEditText().getText().toString().trim();
+        startActivity(contactsListIntent);
     }
 }
