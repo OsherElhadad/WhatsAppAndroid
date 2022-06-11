@@ -1,18 +1,22 @@
 package com.example.whatsappandroid.activities;
 
+import android.Manifest;
 import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.example.whatsappandroid.R;
 
@@ -22,6 +26,7 @@ import java.util.regex.Pattern;
 public class RegisterActivity extends AppCompatActivity {
     ImageView viewImage;
     Button b;
+    TextView tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +34,7 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
         b = findViewById(R.id.btnSelectPhoto);
         viewImage = findViewById(R.id.viewImageProfilePhoto);
+        tv = findViewById(R.id.textViewErrorImgRegister);
         b.setOnClickListener(v -> selectImage());
     }
 
@@ -38,18 +44,46 @@ public class RegisterActivity extends AppCompatActivity {
         builder.setTitle("Add Photo");
         builder.setItems(options, (dialog, item) -> {
             if (options[item].equals("Take Photo")) {
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 try {
-//                    File f = new File(Environment.getExternalStorageDirectory(), "temp.jpg");
-//                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-                    startActivityForResult(takePictureIntent, 1);
-                } catch (ActivityNotFoundException e) {
-                    // display error state to the user
+                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 100);
+                        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                            tv.setVisibility(View.VISIBLE);
+                            tv.setText("Please allow this app permissions to files (gallery) and camera");
+                        } else {
+                            tv.setVisibility(View.INVISIBLE);
+                            startActivityForResult(takePictureIntent, 1);
+                        }
+                    } else {
+                        tv.setVisibility(View.INVISIBLE);
+                        startActivityForResult(takePictureIntent, 1);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             } else if (options[item].equals("Choose from Gallery")) {
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                intent.setType("image/*");
-                startActivityForResult(intent, 2);
+                try {
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                            tv.setVisibility(View.VISIBLE);
+                            tv.setText("Please allow this app permissions to files (gallery) and camera");
+                        } else {
+                            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            intent.setType("image/*");
+                            tv.setVisibility(View.INVISIBLE);
+                            startActivityForResult(intent, 2);
+                        }
+                    } else {
+                        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        intent.setType("image/*");
+                        tv.setVisibility(View.INVISIBLE);
+                        startActivityForResult(intent, 2);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             } else if (options[item].equals("Cancel")) {
                 dialog.dismiss();
             }
