@@ -1,6 +1,7 @@
 package com.example.whatsappandroid.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,7 +26,7 @@ public class ContactsListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts_list);
-        contactsViewModel = new ContactsViewModel();
+        contactsViewModel = new ViewModelProvider(this).get(ContactsViewModel.class);
         setAddContactBtn();
         setAdapter();
         setContactList();

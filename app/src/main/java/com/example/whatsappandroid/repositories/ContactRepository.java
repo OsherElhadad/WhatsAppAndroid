@@ -37,11 +37,14 @@ public class ContactRepository {
         @Override
         protected void onActive() {
             super.onActive();
-
-            new Thread(()-> {
-                contactListData.postValue(contactDao.getContactsWithMessages());
-            }).start();
+            setContactListDataWithDbContacts();
         }
+    }
+
+    protected void setContactListDataWithDbContacts() {
+        new Thread(()-> {
+            contactListData.postValue(contactDao.getContactsWithMessages());
+        }).start();
     }
 
     public LiveData<List<ContactWithMessages>> get() {
@@ -50,10 +53,12 @@ public class ContactRepository {
 
     public void add(Contact contact) {
         this.contactDao.insert(contact);
+        setContactListDataWithDbContacts();
     }
 
-    public void delete(ContactWithMessages contact) {
-
+    public void delete(Contact contact) {
+        contactDao.delete(contact);
+        setContactListDataWithDbContacts();
     }
 
     public void reload() {

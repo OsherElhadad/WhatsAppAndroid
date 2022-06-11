@@ -12,12 +12,12 @@
         android:layout_height="@dimen/_25sdp"
         android:src="@drawable/ic_default_profile_pid"
         android:scaleType="centerCrop"
-        app:layout_constraintBottom_toBottomOf="@id/text_received_message"
+        app:layout_constraintBottom_toBottomOf="@id/text_message"
         app:layout_constraintStart_toStartOf="parent"/>
 
 
     <TextView
-        android:id="@+id/text_received_message"
+        android:id="@+id/text_message"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/received_message_background"
@@ -32,12 +32,13 @@
     </TextView>
 
     <TextView
+        android:id="@+id/time_message"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_4sdp"
         android:textColor="@color/light_orange"
         android:textSize="@dimen/_10ssp"
-        app:layout_constraintStart_toStartOf="@id/text_received_message"
-        app:layout_constraintTop_toBottomOf="@id/text_received_message">
+        app:layout_constraintStart_toStartOf="@id/text_message"
+        app:layout_constraintTop_toBottomOf="@id/text_message">
     </TextView>
 </androidx.constraintlayout.widget.ConstraintLayout>

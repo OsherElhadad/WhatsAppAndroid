@@ -1,6 +1,7 @@
 package com.example.whatsappandroid.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,7 +27,7 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        messagesViewModel = new MessagesViewModel();
+        messagesViewModel = new ViewModelProvider(this).get(MessagesViewModel.class);
         setNicknameHeader();
         setMessageList();
         setMessageBar();
@@ -42,11 +43,18 @@ public class ChatActivity extends AppCompatActivity {
                 return;
             }
 
+            messageET.setText("");
+
             String time = "Time";
 
             Message message = new Message(content, time, true, Info.contactId , Info.loggedUser);
 
             messagesViewModel.add(message);
+
+            Message message1 = new Message("Hard Coded Replay - Test", time, false, Info.contactId , Info.loggedUser);
+
+            messagesViewModel.add(message1);
+
         });
 
     }
@@ -58,10 +66,10 @@ public class ChatActivity extends AppCompatActivity {
 
         messagesViewModel.get().observe(this, messages -> {
             adapter.setMessageList(messages);
+            adapter.notifyDataSetChanged();
         });
 
         messagesListRV.setAdapter(adapter);
-        messagesListRV.setClickable(true);
     }
 
     private void setNicknameHeader() {

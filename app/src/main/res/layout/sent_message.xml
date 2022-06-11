@@ -7,7 +7,7 @@
     android:padding="@dimen/_4sdp">
 
     <TextView
-        android:id="@+id/text_sent_message"
+        android:id="@+id/text_message"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/sent_message_background"
@@ -20,14 +20,14 @@
     </TextView>
 
     <TextView
-        android:id="@+id/time_sent_message"
+        android:id="@+id/time_message"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_4sdp"
         android:textColor="@color/light_orange"
         android:textSize="@dimen/_10ssp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_sent_message">
+        app:layout_constraintTop_toBottomOf="@id/text_message">
     </TextView>
 
 

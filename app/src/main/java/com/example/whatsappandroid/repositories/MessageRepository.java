@@ -15,17 +15,17 @@ import java.util.List;
 
 public class MessageRepository {
     private MessageDao messageDao;
-    private ContactListData messagesListData;
+    private MessageListData messagesListData;
 
     public MessageRepository() {
         AppDB appDB = Room.databaseBuilder(Info.context, AppDB.class, Info.loggedUser)
                 .allowMainThreadQueries().fallbackToDestructiveMigration().build();
         this.messageDao = appDB.messageDao();
-        this.messagesListData = new ContactListData();
+        this.messagesListData = new MessageListData();
     }
 
-    class ContactListData extends MutableLiveData<List<Message>> {
-        public ContactListData() {
+    class MessageListData extends MutableLiveData<List<Message>> {
+        public MessageListData() {
             super();
             setValue(messageDao.getChatMessages(Info.loggedUser, Info.contactId));
         }
@@ -34,11 +34,15 @@ public class MessageRepository {
         protected void onActive() {
             super.onActive();
 
-            new Thread(() -> {
-                messagesListData.postValue(messageDao
-                        .getChatMessages(Info.loggedUser, Info.contactId));
-            }).start();
+            setMessagesListDataWithDbMessages();
         }
+    }
+
+    protected void setMessagesListDataWithDbMessages() {
+        new Thread(() -> {
+            messagesListData.postValue(messageDao
+                    .getChatMessages(Info.loggedUser, Info.contactId));
+        }).start();
     }
 
     public LiveData<List<Message>> get() {
@@ -47,10 +51,12 @@ public class MessageRepository {
 
     public void add(Message message) {
         this.messageDao.insert(message);
+        setMessagesListDataWithDbMessages();
     }
 
     public void delete(Message message) {
-
+        this.messageDao.delete(message);
+        setMessagesListDataWithDbMessages();
     }
 
     public void reload() {
