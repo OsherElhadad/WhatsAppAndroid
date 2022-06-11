@@ -18,16 +18,15 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-//        private final ImageView imageView;
+
         private final TextView content;
         private final TextView time;
 
         public ViewHolder(View view) {
             super(view);
 
-//            imageView = view.findViewById(R.id.profile_image_contact);
-            content = view.findViewById(R.id.text_sent_message);
-            time = view.findViewById(R.id.time_sent_message);
+            content = view.findViewById(R.id.text_message);
+            time = view.findViewById(R.id.time_message);
         }
     }
 
@@ -36,8 +35,24 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
     }
 
     @Override
+    public int getItemViewType(int position) {
+        if (messages != null) {
+            if (messages.get(position).isSent()) {
+                return 0;
+            }
+            return 1;
+        }
+        return -1;
+    }
+
+    @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View view = this.inflater.inflate(R.layout.sent_message, viewGroup, false);
+        View view = null;
+        if (viewType == 0) {
+            view = this.inflater.inflate(R.layout.sent_message, viewGroup, false);
+        } else {
+            view = this.inflater.inflate(R.layout.received_message, viewGroup, false);
+        }
         return new ViewHolder(view);
     }
 

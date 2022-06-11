@@ -29,7 +29,7 @@ public class ContactsViewModel extends ViewModel {
         contactRepository.add(contact);
     }
 
-    public void delete(ContactWithMessages contact) {
+    public void delete(Contact contact) {
         contactRepository.delete(contact);
     }
 
