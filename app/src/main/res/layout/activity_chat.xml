@@ -8,6 +8,7 @@
     tools:context=".activities.ChatActivity">
 
     <LinearLayout
+        android:id="@+id/contact_header_chat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#06ACAB"
@@ -31,7 +32,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/user_name_chat"
+                android:id="@+id/contact_nickname_chat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
@@ -41,7 +42,21 @@
         </LinearLayout>
     </LinearLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/message_list_chat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:padding="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/send_msg_bar_chat"
+        app:layout_constraintTop_toBottomOf="@+id/contact_header_chat"
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="MissingConstraints">
+    </androidx.recyclerview.widget.RecyclerView>
+
     <LinearLayout
+        android:id="@+id/send_msg_bar_chat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"

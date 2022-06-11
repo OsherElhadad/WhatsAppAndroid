@@ -11,4 +11,5 @@
     <string name="go_to_login">Already registered? Login now</string>
     <string name="go_to_register">Not registered yet? Register now</string>
     <string name="select_photo">Select Photo</string>
+    <string name="textview">TextView</string>
 </resources>

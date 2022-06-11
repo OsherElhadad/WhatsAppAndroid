@@ -9,6 +9,7 @@ import androidx.room.Room;
 import com.example.whatsappandroid.db.AppDB;
 import com.example.whatsappandroid.db.ContactDao;
 import com.example.whatsappandroid.db.ContactWithMessagesDao;
+import com.example.whatsappandroid.models.Contact;
 import com.example.whatsappandroid.models.ContactWithMessages;
 import com.example.whatsappandroid.utilities.Info;
 
@@ -47,8 +48,8 @@ public class ContactRepository {
         return contactListData;
     }
 
-    public void add(ContactWithMessages contact) {
-        
+    public void add(Contact contact) {
+        this.contactDao.insert(contact);
     }
 
     public void delete(ContactWithMessages contact) {

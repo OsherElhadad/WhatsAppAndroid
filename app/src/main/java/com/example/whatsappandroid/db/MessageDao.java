@@ -19,6 +19,9 @@ public interface MessageDao {
     @Query("SELECT * FROM message WHERE msgId = :id")
     Message get(int id);
 
+    @Query("SELECT * FROM message WHERE userId = :userId AND contactId = :contactId")
+    Message getChatMessages(String userId, String contactId);
+
     @Insert
     void insert(Message... Messages);
 
