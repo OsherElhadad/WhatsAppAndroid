@@ -6,11 +6,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.whatsappandroid.R;
 import com.example.whatsappandroid.adapters.ContactListAdapter;
 import com.example.whatsappandroid.adapters.MessageListAdapter;
+import com.example.whatsappandroid.models.Message;
 import com.example.whatsappandroid.utilities.Info;
 import com.example.whatsappandroid.viewModels.MessagesViewModel;
 
@@ -23,23 +26,49 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        messagesViewModel = new MessagesViewModel();
+        setNicknameHeader();
+        setMessageList();
+        setMessageBar();
+    }
 
+    private void setMessageBar() {
+        ImageButton sendBtn = findViewById(R.id.send_msg_btn_chat);
+        sendBtn.setOnClickListener(v -> {
+            TextView messageET = findViewById(R.id.et_send_msg_chat);
+            String content = messageET.getText().toString();
+
+            if (content.equals("")) {
+                return;
+            }
+
+            String time = "Time";
+
+            Message message = new Message(content, time, true, Info.contactId , Info.loggedUser);
+
+            messagesViewModel.add(message);
+        });
+
+    }
+
+    private void setMessageList() {
+        RecyclerView messagesListRV = findViewById(R.id.message_list_chat);
+        messagesListRV.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new MessageListAdapter(Info.context);
+
+        messagesViewModel.get().observe(this, messages -> {
+            adapter.setMessageList(messages);
+        });
+
+        messagesListRV.setAdapter(adapter);
+        messagesListRV.setClickable(true);
+    }
+
+    private void setNicknameHeader() {
         Intent currentIntent = getIntent();
         Bundle props = currentIntent.getExtras();
 
         TextView contactNicknameTV = findViewById(R.id.contact_nickname_chat);
         contactNicknameTV.setText(props.get("contactNickname").toString());
-
-//        RecyclerView messagesListRV = findViewById(R.id.message_list_chat);
-//
-//        RecyclerView.setLayoutManager(new LinearLayoutManager(this));
-//
-//        adapter = new MessageListAdapter(Info.context);
-//
-//        messagesViewModel.get().observe(this, messages -> {
-//            adapter.setChatMessages(messages;
-//        });
-//        messagesListRV.setAdapter(adapter);
-//        messagesListRV.setClickable(true);
     }
 }

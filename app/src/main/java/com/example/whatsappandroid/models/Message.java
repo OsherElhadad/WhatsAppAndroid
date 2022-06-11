@@ -11,8 +11,20 @@ public class Message {
     private String content;
     private String created;
     private boolean sent;
-    private String contactId;
+    private int contactId;
     private String userId;
+
+    public Message() {
+
+    }
+
+    public Message(String content, String created, boolean sent, int contactId, String userId) {
+        this.content = content;
+        this.created = created;
+        this.sent = sent;
+        this.contactId = contactId;
+        this.userId = userId;
+    }
 
     public boolean isSent() {
         return sent;
@@ -22,11 +34,11 @@ public class Message {
         this.sent = sent;
     }
 
-    public String getContactId() {
+    public int getContactId() {
         return contactId;
     }
 
-    public void setContactId(String contactId) {
+    public void setContactId(int contactId) {
         this.contactId = contactId;
     }
 
