@@ -27,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         username = findViewById(R.id.usernameLogin);
         username.getEditText().setOnKeyListener((v, keyCode, event) -> {
             validateUsername();

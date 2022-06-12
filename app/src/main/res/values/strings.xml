@@ -17,4 +17,5 @@
     <string name="mode">Mode</string>
     <string name="dark_summery">Enable for dark mode, or light mode else</string>
     <string name="dark_mode">Dark Mode</string>
+    <string name="BaseUrl">http://10.0.2.2:5146/</string>
 </resources>

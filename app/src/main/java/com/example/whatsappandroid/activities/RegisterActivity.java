@@ -52,7 +52,7 @@ public class RegisterActivity extends AppCompatActivity {
         register.setOnClickListener(v -> {
             confirmInput();
         });
-        settings = findViewById(R.id.btnToSettingsLogin);
+        settings = findViewById(R.id.btnToSettingsRegister);
         settings.setOnClickListener(v ->{
             Intent i = new Intent(RegisterActivity.this, SettingsActivity.class);
             startActivity(i);
