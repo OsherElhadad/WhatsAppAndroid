@@ -11,7 +11,7 @@
         android:id="@+id/btnToSettingsLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10pt"
+        android:layout_margin="1pt"
         android:contentDescription="@string/settings"
         android:src="@drawable/ic_settings"
         app:layout_constraintStart_toStartOf="parent"

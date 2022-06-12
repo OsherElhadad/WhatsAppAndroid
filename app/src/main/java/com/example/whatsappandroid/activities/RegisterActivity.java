@@ -32,6 +32,7 @@ public class RegisterActivity extends AppCompatActivity {
     private Button register;
     private TextView tv;
     private FloatingActionButton login;
+    private FloatingActionButton settings;
     private TextInputLayout username;
     private TextInputLayout nickname;
     private TextInputLayout password;
@@ -50,6 +51,11 @@ public class RegisterActivity extends AppCompatActivity {
         register = findViewById(R.id.RegisterButtonRegister);
         register.setOnClickListener(v -> {
             confirmInput();
+        });
+        settings = findViewById(R.id.btnToSettingsLogin);
+        settings.setOnClickListener(v ->{
+            Intent i = new Intent(RegisterActivity.this, SettingsActivity.class);
+            startActivity(i);
         });
         username = findViewById(R.id.usernameRegister);
         username.getEditText().setOnKeyListener((v, keyCode, event) -> {
