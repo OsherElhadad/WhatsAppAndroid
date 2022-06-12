@@ -11,6 +11,7 @@ import com.example.whatsappandroid.R;
 import com.example.whatsappandroid.utilities.Info;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -23,6 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         username = findViewById(R.id.usernameLogin);
         username.getEditText().setOnKeyListener((v, keyCode, event) -> {
             validateUsername();
@@ -73,6 +75,12 @@ public class LoginActivity extends AppCompatActivity {
         if (!valid) {
             return;
         }
+
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(LoginActivity.this,
+                instanceIdResult -> {
+                    String token = instanceIdResult.getToken();
+                });
+
         String input = "Welcome again " + username.getEditText().getText().toString().trim() + "!";
         Toast.makeText(this, input, Toast.LENGTH_SHORT).show();
         Intent contactsListIntent = new Intent(this, ContactsListActivity.class);
