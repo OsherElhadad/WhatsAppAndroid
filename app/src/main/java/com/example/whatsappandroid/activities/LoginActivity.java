@@ -1,10 +1,12 @@
 package com.example.whatsappandroid.activities;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.whatsappandroid.R;
@@ -19,7 +21,9 @@ public class LoginActivity extends AppCompatActivity {
     private Button loginBtn;
     private TextInputLayout username;
     private TextInputLayout password;
+    private FloatingActionButton settings;
 
+    @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +42,12 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn = findViewById(R.id.LoginButtonLogin);
         loginBtn.setOnClickListener(v -> {
             confirmInput();
+        });
+
+        settings = findViewById(R.id.btnToSettingsLogin);
+        settings.setOnClickListener(v ->{
+            Intent i = new Intent(LoginActivity.this, SettingsActivity.class);
+            startActivity(i);
         });
 
         register = findViewById(R.id.btnToRegister);

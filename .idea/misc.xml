@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/osher/AndroidStudioProjects/WhatsAppAndroid/app/src/main/res/drawable-night/gradient_background.xml" value="0.2255" />
         <entry key="..\:/Users/osher/AndroidStudioProjects/WhatsAppAndroid/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1" />
         <entry key="..\:/Users/osher/AndroidStudioProjects/WhatsAppAndroid/app/src/main/res/drawable/custom_button.xml" value="0.2265" />
         <entry key="..\:/Users/osher/AndroidStudioProjects/WhatsAppAndroid/app/src/main/res/drawable/gradient_background.xml" value="0.2265" />
@@ -12,9 +13,12 @@
         <entry key="..\:/Users/osher/AndroidStudioProjects/WhatsAppAndroid/app/src/main/res/layout/activity_chat.xml" value="0.1" />
         <entry key="..\:/Users/osher/AndroidStudioProjects/WhatsAppAndroid/app/src/main/res/layout/activity_contact.xml" value="0.21240942028985507" />
         <entry key="..\:/Users/osher/AndroidStudioProjects/WhatsAppAndroid/app/src/main/res/layout/activity_contacts_list.xml" value="0.21240942028985507" />
-        <entry key="..\:/Users/osher/AndroidStudioProjects/WhatsAppAndroid/app/src/main/res/layout/activity_login.xml" value="0.12158054711246201" />
+        <entry key="..\:/Users/osher/AndroidStudioProjects/WhatsAppAndroid/app/src/main/res/layout/activity_login.xml" value="0.264" />
         <entry key="..\:/Users/osher/AndroidStudioProjects/WhatsAppAndroid/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/osher/AndroidStudioProjects/WhatsAppAndroid/app/src/main/res/layout/activity_register.xml" value="0.21240942028985507" />
+        <entry key="..\:/Users/osher/AndroidStudioProjects/WhatsAppAndroid/app/src/main/res/layout/activity_settings.xml" value="0.22826086956521738" />
+        <entry key="..\:/Users/osher/AndroidStudioProjects/WhatsAppAndroid/app/src/main/res/layout/preferences.xml" value="0.10989583333333333" />
+        <entry key="..\:/Users/osher/AndroidStudioProjects/WhatsAppAndroid/app/src/main/res/xml/preferences.xml" value="0.1" />
       </map>
     </option>
   </component>
