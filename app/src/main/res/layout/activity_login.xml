@@ -7,15 +7,27 @@
     tools:context=".activities.LoginActivity"
     android:background="@drawable/gradient_background">
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnToSettingsLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10pt"
+        android:contentDescription="@string/settings"
+        android:src="@drawable/ic_settings"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:background="@drawable/gradient_box_background"
         android:orientation="vertical"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_margin="20dp"
-
-        android:background="@drawable/gradient_box_background">
+        tools:layout_editor_absoluteX="20dp">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/usernameLogin"
@@ -30,7 +42,8 @@
                 android:layout_marginHorizontal="30dp"
                 android:layout_marginVertical="10dp"
                 android:hint="@string/username_input"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                tools:ignore="TouchTargetSizeCheck" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -77,10 +90,11 @@
                 android:id="@+id/btnToRegister"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 android:layout_margin="10pt"
-                android:src="@drawable/ic_add_person"/>
+                android:contentDescription="@string/go_to_register"
+                android:src="@drawable/ic_add_person"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
         </LinearLayout>
     </LinearLayout>
