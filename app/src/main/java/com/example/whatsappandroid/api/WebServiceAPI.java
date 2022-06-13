@@ -1,6 +1,9 @@
 package com.example.whatsappandroid.api;
 
+import com.example.whatsappandroid.models.Login;
 import com.example.whatsappandroid.models.User;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 
 import java.util.List;
 
@@ -20,4 +23,7 @@ public interface WebServiceAPI {
 
     @DELETE("api/Users/{id}")
     Call<Void> deleteUser(@Path("id") int id);
+
+    @POST("api/LogIn")
+    Call<JsonPrimitive> logIn(@Body Login login);
 }

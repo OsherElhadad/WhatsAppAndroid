@@ -10,17 +10,20 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.whatsappandroid.R;
+import com.example.whatsappandroid.api.LoginApi;
+import com.example.whatsappandroid.loggable;
 import com.example.whatsappandroid.utilities.Info;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.iid.FirebaseInstanceId;
 
-public class LoginActivity extends AppCompatActivity {
-
+public class LoginActivity extends AppCompatActivity implements loggable {
     private FloatingActionButton register;
     private Button loginBtn;
-    private TextInputLayout username;
-    private TextInputLayout password;
+    private TextInputLayout usernameTIL;
+    private TextInputLayout passwordTIL;
+    private String username;
+    private String password;
     private FloatingActionButton settings;
 
     @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
@@ -28,75 +31,91 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        findActivityViews();
+        setActivityListeners();
+    }
 
-        username = findViewById(R.id.usernameLogin);
-        username.getEditText().setOnKeyListener((v, keyCode, event) -> {
+    private void setActivityListeners() {
+        usernameTIL.getEditText().setOnKeyListener((v, keyCode, event) -> {
+            username = usernameTIL.getEditText().getText().toString().trim();
             validateUsername();
             return false;
         });
-        password = findViewById(R.id.passwordLogin);
-        password.getEditText().setOnKeyListener((v, keyCode, event) -> {
+        passwordTIL.getEditText().setOnKeyListener((v, keyCode, event) -> {
+            password = passwordTIL.getEditText().getText().toString().trim();
             validatePassword();
             return false;
         });
-        loginBtn = findViewById(R.id.LoginButtonLogin);
         loginBtn.setOnClickListener(v -> {
-            confirmInput();
+            if (confirmInput() == 1) {
+                login();
+            }
         });
-
-        settings = findViewById(R.id.btnToSettingsLogin);
-        settings.setOnClickListener(v ->{
+        settings.setOnClickListener(v -> {
             Intent i = new Intent(LoginActivity.this, SettingsActivity.class);
             startActivity(i);
         });
-
-        register = findViewById(R.id.btnToRegister);
-
         register.setOnClickListener(v -> {
             Intent registerIntent = new Intent(this, RegisterActivity.class);
             startActivity(registerIntent);
         });
     }
 
+    private void findActivityViews() {
+        usernameTIL = findViewById(R.id.usernameLogin);
+        passwordTIL = findViewById(R.id.passwordLogin);
+        loginBtn = findViewById(R.id.LoginButtonLogin);
+        settings = findViewById(R.id.btnToSettingsLogin);
+        register = findViewById(R.id.btnToRegister);
+    }
+
     private boolean validateUsername() {
-        String usernameInput = username.getEditText().getText().toString().trim();
-        if (usernameInput == null || usernameInput.length() == 0) {
-            username.setError("Username can not be empty");
+        if (username == null || username.length() == 0) {
+            usernameTIL.setError("Username can not be empty");
             return false;
         } else {
-            username.setError(null);
+            usernameTIL.setError(null);
             return true;
         }
     }
 
     private boolean validatePassword() {
-        String passwordInput = password.getEditText().getText().toString().trim();
-        if (passwordInput == null || passwordInput.length() == 0) {
-            password.setError("Password can not be empty");
+        if (password == null || password.length() == 0) {
+            passwordTIL.setError("Password can not be empty");
             return false;
         } else {
-            password.setError(null);
+            passwordTIL.setError(null);
             return true;
         }
     }
 
-    public void confirmInput() {
+    public int confirmInput() {
         boolean valid = validateUsername() || validatePassword();
         if (!valid) {
-            return;
+            return 0;
         }
+        return 1;
+    }
 
+    public void login() {
         FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(LoginActivity.this,
                 instanceIdResult -> {
                     String token = instanceIdResult.getToken();
                 });
 
-        String input = "Welcome again " + username.getEditText().getText().toString().trim() + "!";
-        Toast.makeText(this, input, Toast.LENGTH_SHORT).show();
-        Intent contactsListIntent = new Intent(this, ContactsListActivity.class);
+        LoginApi loginApi = new LoginApi(this);
+        loginApi.loginToServer(username, password);
+    }
 
-        // pass username to the contacts list screen
-        Info.loggedUser = username.getEditText().getText().toString().trim();
+    public void onSuccessfulLogin() {
+        Toast.makeText(this, "Welcome again " + Info.loggedUser + "!",
+                Toast.LENGTH_SHORT).show();
+        Intent contactsListIntent = new Intent(this, ContactsListActivity.class);
         startActivity(contactsListIntent);
+    }
+
+    @Override
+    public void onFailedLogin() {
+        Toast.makeText(Info.context, "Something went wrong :(", Toast.LENGTH_SHORT).show();
     }
 }
