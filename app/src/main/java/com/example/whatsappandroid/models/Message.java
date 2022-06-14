@@ -12,7 +12,7 @@ public class Message {
     private String content;
     private String created;
     private boolean sent;
-    private int contactId;
+    private String contactId;
     private String userId;
 
     public Message() {
@@ -20,7 +20,7 @@ public class Message {
     }
 
     @Ignore
-    public Message(String content, String created, boolean sent, int contactId, String userId) {
+    public Message(String content, String created, boolean sent, String contactId, String userId) {
         this.content = content;
         this.created = created;
         this.sent = sent;
@@ -36,11 +36,11 @@ public class Message {
         this.sent = sent;
     }
 
-    public int getContactId() {
+    public String getContactId() {
         return contactId;
     }
 
-    public void setContactId(int contactId) {
+    public void setContactId(String contactId) {
         this.contactId = contactId;
     }
 

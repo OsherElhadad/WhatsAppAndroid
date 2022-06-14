@@ -10,7 +10,7 @@ public class Info extends Application {
     public static String loggedUser;
     public static String loggerUserToken;
     public static boolean isLogged;
-    public static int contactId;
+    public static String contactId;
 
     @Override
     public void onCreate() {

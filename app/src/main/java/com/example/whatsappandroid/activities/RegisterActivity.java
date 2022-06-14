@@ -18,74 +18,114 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.whatsappandroid.R;
 import com.example.whatsappandroid.utilities.Info;
+import com.example.whatsappandroid.viewModels.RegisterViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
+    private RegisterViewModel registerViewModel;
     private ImageView viewImage;
     private Button b;
-    private Button register;
+    private Button registerBtn;
     private TextView tv;
-    private FloatingActionButton login;
-    private FloatingActionButton settings;
-    private TextInputLayout username;
-    private TextInputLayout nickname;
-    private TextInputLayout password;
-    private TextInputLayout repeatPassword;
+    private FloatingActionButton loginBtn;
+    private FloatingActionButton settingsBtn;
+    private TextInputLayout usernameTIL;
+    private String username;
+    private TextInputLayout nicknameTIL;
+    private String nickname;
+    private TextInputLayout passwordTIL;
+    private String password;
+    private TextInputLayout repeatPasswordTIL;
+    private String repeatPassword;
     private static final Pattern NAME_PATTERN = Pattern.compile("^[a-zA-Z0-9][a-zA-Z0-9]+$");
     private static final Pattern PASSWORD_PATTERN = Pattern.compile("^[a-zA-Z0-9!@#$%^&*():/_-]" +
-                                                    "[a-zA-Z0-9!@#$%^&*():/_-]+$");
+            "[a-zA-Z0-9!@#$%^&*():/_-]+$");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        b = findViewById(R.id.btnSelectPhoto);
-        viewImage = findViewById(R.id.viewImageProfilePhoto);
-        tv = findViewById(R.id.textViewErrorImgRegister);
-        register = findViewById(R.id.RegisterButtonRegister);
-        register.setOnClickListener(v -> {
-            confirmInput();
+        registerViewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
+
+        registerViewModel.get().observe(this, isSucceeded -> {
+            if (isSucceeded) {
+                String input = "Welcome " + username + "!";
+                Toast.makeText(this, input, Toast.LENGTH_SHORT).show();
+                Intent contactsListIntent = new Intent(this, ContactsListActivity.class);
+
+                // pass username to the contacts list screen
+                Info.loggedUser = username;
+                startActivity(contactsListIntent);
+            }
         });
-        settings = findViewById(R.id.btnToSettingsRegister);
-        settings.setOnClickListener(v ->{
+
+        findViews();
+        setListeners();
+    }
+
+    private void setListeners() {
+        registerBtn.setOnClickListener(v -> {
+            if(confirmInput() == 1) {
+                registerViewModel.registerUser(usernameTIL.getEditText().getText().toString().trim(),
+                        passwordTIL.getEditText().getText().toString().trim());
+            }
+        });
+
+        settingsBtn.setOnClickListener(v -> {
             Intent i = new Intent(RegisterActivity.this, SettingsActivity.class);
             startActivity(i);
         });
-        username = findViewById(R.id.usernameRegister);
-        username.getEditText().setOnKeyListener((v, keyCode, event) -> {
+
+        usernameTIL.getEditText().setOnKeyListener((v, keyCode, event) -> {
+            username = usernameTIL.getEditText().getText().toString().trim();
             validateUsername();
             return false;
         });
-        nickname = findViewById(R.id.nicknameRegister);
-        nickname.getEditText().setOnKeyListener((v, keyCode, event) -> {
+
+        nicknameTIL.getEditText().setOnKeyListener((v, keyCode, event) -> {
+            nickname = nicknameTIL.getEditText().getText().toString().trim();
             validateNickname();
             return false;
         });
-        password = findViewById(R.id.passwordRegister);
-        password.getEditText().setOnKeyListener((v, keyCode, event) -> {
+
+        passwordTIL.getEditText().setOnKeyListener((v, keyCode, event) -> {
+            password = passwordTIL.getEditText().getText().toString().trim();
             validatePassword();
             return false;
         });
-        repeatPassword = findViewById(R.id.repeatPasswordRegister);
-        repeatPassword.getEditText().setOnKeyListener((v, keyCode, event) -> {
+
+        repeatPasswordTIL.getEditText().setOnKeyListener((v, keyCode, event) -> {
+            repeatPassword = repeatPasswordTIL.getEditText().getText().toString().trim();
             validateRepeatPassword();
             return false;
         });
 
         b.setOnClickListener(v -> selectImage());
 
-        login = findViewById(R.id.btnToLogin);
-
-        login.setOnClickListener(v -> {
+        loginBtn.setOnClickListener(v -> {
             Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivity(loginIntent);
         });
+    }
+
+    private void findViews() {
+        b = findViewById(R.id.btnSelectPhoto);
+        tv = findViewById(R.id.textViewErrorImgRegister);
+        viewImage = findViewById(R.id.viewImageProfilePhoto);
+        registerBtn = findViewById(R.id.RegisterButtonRegister);
+        settingsBtn = findViewById(R.id.btnToSettingsRegister);
+        usernameTIL = findViewById(R.id.usernameRegister);
+        nicknameTIL = findViewById(R.id.nicknameRegister);
+        passwordTIL = findViewById(R.id.passwordRegister);
+        repeatPasswordTIL = findViewById(R.id.repeatPasswordRegister);
+        loginBtn = findViewById(R.id.btnToLogin);
     }
 
     private void selectImage() {
@@ -155,15 +195,15 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             } else if (requestCode == 2) {
                 try {
-                Uri selectedImage = data.getData();
-                String[] filePath = {MediaStore.Images.Media.DATA};
-                Cursor c = getContentResolver().query(selectedImage, filePath, null, null, null);
-                c.moveToFirst();
-                int columnIndex = c.getColumnIndex(filePath[0]);
-                String picturePath = c.getString(columnIndex);
-                c.close();
-                Bitmap thumbnail = (BitmapFactory.decodeFile(picturePath));
-                viewImage.setImageBitmap(thumbnail);
+                    Uri selectedImage = data.getData();
+                    String[] filePath = {MediaStore.Images.Media.DATA};
+                    Cursor c = getContentResolver().query(selectedImage, filePath, null, null, null);
+                    c.moveToFirst();
+                    int columnIndex = c.getColumnIndex(filePath[0]);
+                    String picturePath = c.getString(columnIndex);
+                    c.close();
+                    Bitmap thumbnail = (BitmapFactory.decodeFile(picturePath));
+                    viewImage.setImageBitmap(thumbnail);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -172,83 +212,64 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private boolean validateUsername() {
-        String usernameInput = username.getEditText().getText().toString().trim();
-        if (usernameInput == null || usernameInput.length() == 0) {
-            username.setError("Username can not be empty");
+        if (username == null || username.length() == 0) {
+            usernameTIL.setError("Username can not be empty");
             return false;
-        }
-
-        else if (!NAME_PATTERN.matcher(usernameInput).matches()) {
-            username.setError("Username must have at least 2 English/numbers chars");
+        } else if (!NAME_PATTERN.matcher(username).matches()) {
+            usernameTIL.setError("Username must have at least 2 English/numbers chars");
             return false;
         } else {
-            username.setError(null);
+            usernameTIL.setError(null);
             return true;
         }
     }
 
     private boolean validateNickname() {
-        String nicknameInput = nickname.getEditText().getText().toString().trim();
-        if (nicknameInput == null || nicknameInput.length() == 0) {
-            nickname.setError("Nickname can not be empty");
+        if (nickname == null || nickname.length() == 0) {
+            nicknameTIL.setError("Nickname can not be empty");
             return false;
-        }
-
-        else if (!NAME_PATTERN.matcher(nicknameInput).matches()) {
-            nickname.setError("Nickname must have at least 2 English/numbers chars");
+        } else if (!NAME_PATTERN.matcher(nickname).matches()) {
+            nicknameTIL.setError("Nickname must have at least 2 English/numbers chars");
             return false;
         } else {
-            nickname.setError(null);
+            nicknameTIL.setError(null);
             return true;
         }
     }
 
     private boolean validatePassword() {
-        String passwordInput = password.getEditText().getText().toString().trim();
-        if (passwordInput == null || passwordInput.length() == 0) {
-            password.setError("Password can not be empty");
+        if (password == null || password.length() == 0) {
+            passwordTIL.setError("Password can not be empty");
             return false;
-        }
-
-        else if (!PASSWORD_PATTERN.matcher(passwordInput).matches()) {
-            password.setError("Password must have at least 2" +
+        } else if (!PASSWORD_PATTERN.matcher(password).matches()) {
+            passwordTIL.setError("Password must have at least 2" +
                     " English, numbers or special chars");
             return false;
         } else {
-            password.setError(null);
+            passwordTIL.setError(null);
             return true;
         }
     }
 
     private boolean validateRepeatPassword() {
-        String repeatPasswordInput = repeatPassword.getEditText().getText().toString().trim();
-        String passwordInput = password.getEditText().getText().toString().trim();
-        if (repeatPasswordInput == null || repeatPasswordInput.length() == 0) {
-            repeatPassword.setError("Repeat password can not be empty");
+        if (repeatPassword == null || repeatPassword.length() == 0) {
+            repeatPasswordTIL.setError("Repeat password can not be empty");
             return false;
-        }
-
-        else if (!passwordInput.equals(repeatPasswordInput)) {
-            repeatPassword.setError("Repeat password must be equal to Password");
+        } else if (!password.equals(repeatPassword)) {
+            repeatPasswordTIL.setError("Repeat password must be equal to Password");
             return false;
         } else {
-            repeatPassword.setError(null);
+            repeatPasswordTIL.setError(null);
             return true;
         }
     }
 
-    public void confirmInput() {
+    public int confirmInput() {
         boolean valid = validateUsername() || validateNickname() ||
                 validatePassword() || validateRepeatPassword();
         if (!valid) {
-            return;
+            return 0;
         }
-        String input = "Welcome " + username.getEditText().getText().toString().trim() + "!";
-        Toast.makeText(this, input, Toast.LENGTH_SHORT).show();
-        Intent contactsListIntent = new Intent(this, ContactsListActivity.class);
-
-        // pass username to the contacts list screen
-        Info.loggedUser = username.getEditText().getText().toString().trim();
-        startActivity(contactsListIntent);
+        return 1;
     }
 }

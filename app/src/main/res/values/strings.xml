@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">WhatsAppAndroid</string>
+    <string name="myServerPort">5146</string>
     <string name="username_input">Username</string>
     <string name="password_input">Password</string>
     <string name="repeat_password_input">Repeat password</string>
@@ -17,5 +18,5 @@
     <string name="mode">Mode</string>
     <string name="dark_summery">Enable for dark mode, or light mode else</string>
     <string name="dark_mode">Dark Mode</string>
-    <string name="BaseUrl">http://10.0.2.2:5146/</string>
+    <string name="basicServerUrl">http://10.0.2.2:</string>
 </resources>

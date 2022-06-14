@@ -2,16 +2,13 @@ package com.example.whatsappandroid.repositories;
 
 import android.os.AsyncTask;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.Room;
 
 import com.example.whatsappandroid.api.ContactApi;
 import com.example.whatsappandroid.db.AppDB;
 import com.example.whatsappandroid.db.ContactDao;
-import com.example.whatsappandroid.db.ContactWithMessagesDao;
 import com.example.whatsappandroid.models.Contact;
-import com.example.whatsappandroid.models.ContactWithMessages;
 import com.example.whatsappandroid.utilities.Info;
 
 import java.util.List;
@@ -39,6 +36,8 @@ public class ContactRepository {
         protected void onActive() {
             super.onActive();
 
+//            setContactListDataWithDbContacts();
+
             // load contacts from server API
             setContactListDataWithServerAPIContacts();
         }
@@ -50,9 +49,9 @@ public class ContactRepository {
 
 
     protected void setContactListDataWithDbContacts() {
-        new Thread(()-> {
-            contactListData.postValue(contactDao.getAllContacts());
-        }).start();
+
+            contactListData.setValue(contactDao.getAllContacts());
+
     }
 
     public MutableLiveData<List<Contact>> get() {
@@ -60,8 +59,12 @@ public class ContactRepository {
     }
 
     public void add(Contact contact) {
-        this.contactDao.insert(contact);
-        setContactListDataWithDbContacts();
+
+        this.contactApi.addContact(contact, Info.loggedUser,
+                "Bearer " + Info.loggerUserToken, this.contactListData);
+
+//        this.contactDao.insert(contact);
+//        setContactListDataWithDbContacts();
     }
 
     public void delete(Contact contact) {

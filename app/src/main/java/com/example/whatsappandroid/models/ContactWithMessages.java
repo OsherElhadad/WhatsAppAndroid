@@ -13,7 +13,7 @@ public class ContactWithMessages {
     @Embedded
     public Contact contact;
     @Relation(
-            parentColumn = "contactId",
+            parentColumn = "id",
             entityColumn = "msgId"
     )
     public List<Message> messages;

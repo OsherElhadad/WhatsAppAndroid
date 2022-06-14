@@ -1,13 +1,15 @@
 package com.example.whatsappandroid.models;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
 public class Contact {
 
-    @PrimaryKey(autoGenerate = true)
-    private int contactId;
+    @PrimaryKey(autoGenerate = false)
+    @NonNull
+    private String id;
     private String name;
     private String server;
     private int pictureId;
@@ -15,8 +17,8 @@ public class Contact {
     private String lastdate;
     private String userId;
 
-    public void setContactId(int contactId) {
-        this.contactId = contactId;
+    public void setId(String contactId) {
+        this.id = contactId;
     }
 
     public void setName(String name) {
@@ -44,6 +46,7 @@ public class Contact {
     }
 
     public Contact() {
+        this.id = null;
         this.name = null;
         this.server = null;
         this.last = null;
@@ -51,14 +54,18 @@ public class Contact {
         this.userId = null;
     }
 
-    public Contact(String name, int pictureId, String last, String lastMassageSendingTime) {
+    public Contact(String id, String name, int pictureId,
+                   String last, String lastMassageSendingTime) {
+        this.id = id;
         this.name = name;
         this.pictureId = pictureId;
         this.last = last;
         this.lastdate = lastMassageSendingTime;
     }
 
-    public Contact(String name, String server, String last, String lastMassageSendingTime, String userId) {
+    public Contact(String id, String name, String server,
+                   String last, String lastMassageSendingTime, String userId) {
+        this.id = id;
         this.name = name;
         this.server = server;
         this.last = last;
@@ -66,8 +73,8 @@ public class Contact {
         this.userId = userId;
     }
 
-    public int getContactId() {
-        return this.contactId;
+    public String getId() {
+        return this.id;
     }
 
     public String getName() {
@@ -76,6 +83,10 @@ public class Contact {
 
     public String getServer() {
         return this.server;
+    }
+
+    public String getServerPort() {
+        return this.server.substring(this.server.lastIndexOf(":") + 1);
     }
 
     public int getPictureId() {

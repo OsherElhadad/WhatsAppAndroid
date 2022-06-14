@@ -22,8 +22,8 @@ public interface ContactDao {
     @Query("SELECT * FROM contact")
     List<ContactWithMessages> getAllContactsWithMessages();
 
-    @Query("SELECT * FROM contact WHERE contactId = :id")
-    Contact get(int id);
+    @Query("SELECT * FROM contact WHERE id = :id")
+    Contact get(String id);
 
     @Insert
     void insert(Contact... Contacts);

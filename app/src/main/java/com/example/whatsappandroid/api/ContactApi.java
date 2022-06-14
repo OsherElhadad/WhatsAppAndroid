@@ -7,15 +7,11 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.whatsappandroid.R;
 import com.example.whatsappandroid.db.ContactDao;
-import com.example.whatsappandroid.db.ContactWithMessagesDao;
-import com.example.whatsappandroid.loggable;
 import com.example.whatsappandroid.models.Contact;
-import com.example.whatsappandroid.models.ContactWithMessages;
-import com.example.whatsappandroid.models.Login;
+import com.example.whatsappandroid.models.Invitation;
 import com.example.whatsappandroid.utilities.Info;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonPrimitive;
 
 import java.util.List;
 
@@ -33,7 +29,8 @@ public class ContactApi {
     public ContactApi(ContactDao contactDao) {
         Gson gson = new GsonBuilder().setLenient().create();
         this.retrofit = new Retrofit.Builder()
-                .baseUrl(Info.context.getString(R.string.BaseUrl))
+                .baseUrl(Info.context.getString(R.string.basicServerUrl) +
+                        Info.context.getString(R.string.myServerPort) + "/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         this.webServiceAPI = this.retrofit.create(WebServiceAPI.class);
@@ -44,12 +41,15 @@ public class ContactApi {
         Call<List<Contact>> call = webServiceAPI.getAllContacts(token);
         call.enqueue(new Callback<List<Contact>>() {
             @Override
-            public void onResponse(@NonNull Call<List<Contact>> call, @NonNull Response<List<Contact>> response) {
+            public void onResponse(@NonNull Call<List<Contact>> call,
+                                   @NonNull Response<List<Contact>> response) {
                 new Thread(() -> {
                     contactDao.clear();
-                    assert response.body() != null;
+                    if (response.body() == null) {
+                        return;
+                    }
 
-                    for (Contact contact: response.body()) {
+                    for (Contact contact : response.body()) {
                         contactDao.insert(contact);
                     }
                     contacts.postValue(response.body());
@@ -59,6 +59,54 @@ public class ContactApi {
             @Override
             public void onFailure(@NonNull Call<List<Contact>> call, @NonNull Throwable t) {
                 Log.e("E", t.getMessage());
+            }
+        });
+    }
+
+    public void addContact(Contact contact, String username, String token,
+                           MutableLiveData<List<Contact>> contacts) {
+        Invitation invitation = new Invitation(username, contact.getName(), contact.getServer());
+        Retrofit contactRetrofit = new Retrofit.Builder()
+                .baseUrl(Info.context.getString(R.string.basicServerUrl) +
+                        contact.getServerPort() + "/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        WebServiceAPI contactServerApi = contactRetrofit.create(WebServiceAPI.class);
+        Call<Void> call = contactServerApi.postInvitation(invitation);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+
+                    if (response.isSuccessful()) {
+                        addToMyServer(contact, token, contacts);
+                    }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                Log.e("onFailure: ", t.getMessage());
+            }
+        });
+    }
+
+    private void addToMyServer(Contact contact, String userToken,
+                               MutableLiveData<List<Contact>> contacts) {
+        Call<Void> call = webServiceAPI.postContact(contact, userToken);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+
+                    if (response.isSuccessful()) {
+                        contactDao.insert(contact);
+                        contacts.setValue(contactDao.getAllContacts());
+                    }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                Log.e("onFailure: ", t.getMessage());
             }
         });
     }

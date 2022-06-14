@@ -47,11 +47,12 @@ public class ChatActivity extends AppCompatActivity {
 
             String time = "Time";
 
-            Message message = new Message(content, time, true, Info.contactId , Info.loggedUser);
+            Message message = new Message(content, time, true, Info.contactId, Info.loggedUser);
 
             messagesViewModel.add(message);
 
-            Message message1 = new Message("Hard Coded Replay - Test", time, false, Info.contactId , Info.loggedUser);
+            Message message1 = new Message("Hard Coded Replay - Test", time, false,
+                    Info.contactId, Info.loggedUser);
 
             messagesViewModel.add(message1);
 
