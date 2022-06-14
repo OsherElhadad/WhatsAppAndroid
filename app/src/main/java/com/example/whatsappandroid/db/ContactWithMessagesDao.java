@@ -16,7 +16,7 @@ import java.util.List;
 public interface ContactWithMessagesDao {
     @Transaction
     @Query("SELECT * FROM Contact")
-    public List<ContactWithMessages> getContactsWithMessages();
+    List<ContactWithMessages> getContactsWithMessages();
 
     @Query("SELECT * FROM contact WHERE contactId = :id")
     Contact get(int id);
@@ -29,4 +29,7 @@ public interface ContactWithMessagesDao {
 
     @Delete
     void delete(Contact... Contacts);
+
+    @Query("DELETE FROM contact")
+    void clear();
 }

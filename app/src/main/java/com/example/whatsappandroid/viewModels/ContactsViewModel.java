@@ -14,14 +14,14 @@ import java.util.List;
 
 public class ContactsViewModel extends ViewModel {
     private ContactRepository contactRepository;
-    private LiveData<List<ContactWithMessages>> contacts;
+    private LiveData<List<Contact>> contacts;
 
     public ContactsViewModel() {
         this.contactRepository = new ContactRepository();
         this.contacts = contactRepository.get();
     }
 
-    public LiveData<List<ContactWithMessages>> get() {
+    public LiveData<List<Contact>> get() {
         return contacts;
     }
 

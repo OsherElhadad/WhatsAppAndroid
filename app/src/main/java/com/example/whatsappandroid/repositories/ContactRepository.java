@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.Room;
 
+import com.example.whatsappandroid.api.ContactApi;
 import com.example.whatsappandroid.db.AppDB;
 import com.example.whatsappandroid.db.ContactDao;
 import com.example.whatsappandroid.db.ContactWithMessagesDao;
@@ -13,12 +14,11 @@ import com.example.whatsappandroid.models.Contact;
 import com.example.whatsappandroid.models.ContactWithMessages;
 import com.example.whatsappandroid.utilities.Info;
 
-import java.util.LinkedList;
 import java.util.List;
 
 public class ContactRepository {
-
-    private ContactWithMessagesDao contactDao;
+    private ContactApi contactApi;
+    private ContactDao contactDao;
     private ContactListData contactListData;
 
     public ContactRepository() {
@@ -26,28 +26,39 @@ public class ContactRepository {
                      .allowMainThreadQueries().fallbackToDestructiveMigration().build();
         this.contactDao = appDB.contactDao();
         this.contactListData = new ContactListData();
+        this.contactApi = new ContactApi(this.contactDao);
     }
 
-    class ContactListData extends MutableLiveData<List<ContactWithMessages>> {
+    class ContactListData extends MutableLiveData<List<Contact>> {
         public ContactListData() {
             super();
-            setValue(contactDao.getContactsWithMessages());
+            setValue(contactDao.getAllContacts());
         }
 
         @Override
         protected void onActive() {
             super.onActive();
-            setContactListDataWithDbContacts();
+
+            //load contacts from room
+//            setContactListDataWithDbContacts();
+
+            // load contacts from server API
+            setContactListDataWithServerAPIContacts();
         }
     }
 
+    protected void setContactListDataWithServerAPIContacts() {
+        this.contactApi.getAllContacts(this.contactListData, "Bearer " + Info.loggerUserToken);
+    }
+
+
     protected void setContactListDataWithDbContacts() {
         new Thread(()-> {
-            contactListData.postValue(contactDao.getContactsWithMessages());
+            contactListData.postValue(contactDao.getAllContacts());
         }).start();
     }
 
-    public LiveData<List<ContactWithMessages>> get() {
+    public LiveData<List<Contact>> get() {
         return contactListData;
     }
 
@@ -66,11 +77,11 @@ public class ContactRepository {
     }
 
     public class GetContactsTask extends AsyncTask<Void, Void, Void> {
-        private MutableLiveData<List<ContactWithMessages>> contactsListData;
-        private ContactWithMessagesDao contactDao;
+        private MutableLiveData<List<Contact>> contactsListData;
+        private ContactDao contactDao;
 
-        public GetContactsTask(MutableLiveData<List<ContactWithMessages>> contactsListData,
-                               ContactWithMessagesDao contactDao) {
+        public GetContactsTask(MutableLiveData<List<Contact>> contactsListData,
+                               ContactDao contactDao) {
             this.contactDao = contactDao;
             this.contactsListData = contactsListData;
         }

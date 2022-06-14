@@ -33,7 +33,6 @@ public class MessageRepository {
         @Override
         protected void onActive() {
             super.onActive();
-
             setMessagesListDataWithDbMessages();
         }
     }

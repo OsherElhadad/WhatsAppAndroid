@@ -43,8 +43,8 @@ public class ContactsListActivity extends AppCompatActivity {
     private void setAdapter() {
         adapter = new ContactListAdapter(getApplicationContext(), contact -> {
             Intent chatIntent = new Intent(Info.context, ChatActivity.class);
-            Info.contactId = contact.contact.getContactId();
-            chatIntent.putExtra("contactNickname", contact.contact.getName());
+            Info.contactId = contact.getContactId();
+            chatIntent.putExtra("contactNickname", contact.getName());
             startActivity(chatIntent);
         });
     }

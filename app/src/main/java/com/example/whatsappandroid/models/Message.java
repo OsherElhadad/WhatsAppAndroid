@@ -1,6 +1,7 @@
 package com.example.whatsappandroid.models;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity
@@ -18,6 +19,7 @@ public class Message {
 
     }
 
+    @Ignore
     public Message(String content, String created, boolean sent, int contactId, String userId) {
         this.content = content;
         this.created = created;

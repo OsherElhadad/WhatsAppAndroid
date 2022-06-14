@@ -1,6 +1,7 @@
 package com.example.whatsappandroid.models;
 
 import androidx.room.Embedded;
+import androidx.room.Entity;
 import androidx.room.Relation;
 
 import com.example.whatsappandroid.models.Contact;

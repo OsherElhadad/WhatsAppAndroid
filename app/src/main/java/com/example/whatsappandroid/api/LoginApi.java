@@ -41,7 +41,8 @@ public class LoginApi {
             public void onResponse(@NonNull Call<JsonPrimitive> call,
                                    @NonNull Response<JsonPrimitive> response) {
                 if (response.code() == 200 && response.body() != null) {
-                    Info.loggerUserToken = response.body().toString();
+                    String token = response.body().toString();
+                    Info.loggerUserToken = token.substring(1, token.length() - 1);
                     loggable.onSuccessfulLogin();
                 } else {
                     Info.loggedUser = null;

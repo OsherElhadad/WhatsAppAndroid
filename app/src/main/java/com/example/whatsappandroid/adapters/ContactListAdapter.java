@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.whatsappandroid.models.Contact;
 import com.example.whatsappandroid.models.ContactWithMessages;
 import com.example.whatsappandroid.listeners.OnItemClickListener;
 import com.example.whatsappandroid.R;
@@ -16,7 +18,7 @@ import java.util.List;
 public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ViewHolder> {
 
     private LayoutInflater inflater;
-    private List<ContactWithMessages> contacts;
+    private List<Contact> contacts;
     private OnItemClickListener listener;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -49,10 +51,10 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         if (this.contacts != null) {
-            viewHolder.imageView.setImageResource(contacts.get(position).contact.getPictureId());
-            viewHolder.userName.setText(contacts.get(position).contact.getName());
-            viewHolder.lastMsg.setText(contacts.get(position).contact.getLast());
-            viewHolder.time.setText(contacts.get(position).contact.getLastdate());
+            viewHolder.imageView.setImageResource(contacts.get(position).getPictureId());
+            viewHolder.userName.setText(contacts.get(position).getName());
+            viewHolder.lastMsg.setText(contacts.get(position).getLast());
+            viewHolder.time.setText(contacts.get(position).getLastdate());
             viewHolder.itemView.setOnClickListener(view -> {
                 listener.onItemClick(contacts.get(position));
             });
@@ -67,7 +69,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         return this.contacts.size();
     }
 
-    public void setContactsList(List<ContactWithMessages> newContacts) {
+    public void setContactsList(List<Contact> newContacts) {
         this.contacts = newContacts;
         notifyDataSetChanged();
     }
