@@ -1,10 +1,9 @@
 package com.example.whatsappandroid.api;
 
 import com.example.whatsappandroid.models.Contact;
-import com.example.whatsappandroid.models.ContactWithMessages;
 import com.example.whatsappandroid.models.Login;
 import com.example.whatsappandroid.models.User;
-import com.google.gson.JsonObject;
+import com.example.whatsappandroid.models.UserFBToken;
 import com.google.gson.JsonPrimitive;
 
 import java.util.List;
@@ -29,6 +28,9 @@ public interface WebServiceAPI {
 
     @POST("api/LogIn")
     Call<JsonPrimitive> logIn(@Body Login login);
+
+    @POST("api/ConnectToFirebase")
+    Call<Void> ConnectToFirebase(@Body UserFBToken userFBToken);
 
     @GET("api/Contacts")
     Call<List<Contact>> getAllContacts(@Header("authorization") String auth);

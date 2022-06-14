@@ -2,6 +2,7 @@ package com.example.whatsappandroid;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.util.Log;
 
@@ -15,7 +16,11 @@ public class SettingsFragment extends PreferenceFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
-        findPreference(getString(R.string.mode)).setOnPreferenceChangeListener((preference, newValue) -> {
+        Preference p = findPreference(getString(R.string.mode));
+        if (p == null) {
+            return;
+        }
+        p.setOnPreferenceChangeListener((preference, newValue) -> {
             Log.i("newValue", newValue.toString());
             if (newValue.toString() == "false") {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
