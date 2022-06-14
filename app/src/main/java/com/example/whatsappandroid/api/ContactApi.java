@@ -53,7 +53,7 @@ public class ContactApi {
                         contactDao.insert(contact);
                     }
                     contacts.postValue(response.body());
-                });
+                }).start();
             }
 
             @Override
@@ -62,5 +62,4 @@ public class ContactApi {
             }
         });
     }
-
 }

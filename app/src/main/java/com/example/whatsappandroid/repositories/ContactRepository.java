@@ -39,9 +39,6 @@ public class ContactRepository {
         protected void onActive() {
             super.onActive();
 
-            //load contacts from room
-//            setContactListDataWithDbContacts();
-
             // load contacts from server API
             setContactListDataWithServerAPIContacts();
         }
@@ -58,7 +55,7 @@ public class ContactRepository {
         }).start();
     }
 
-    public LiveData<List<Contact>> get() {
+    public MutableLiveData<List<Contact>> get() {
         return contactListData;
     }
 
