@@ -10,6 +10,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.whatsappandroid.R;
+import com.example.whatsappandroid.api.ConnectToFirebaseApi;
 import com.example.whatsappandroid.api.LoginApi;
 import com.example.whatsappandroid.loggable;
 import com.example.whatsappandroid.utilities.Info;
@@ -100,11 +101,14 @@ public class LoginActivity extends AppCompatActivity implements loggable {
     public void login() {
         FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(LoginActivity.this,
                 instanceIdResult -> {
-                    String token = instanceIdResult.getToken();
+                    String t = instanceIdResult.getToken();
                 });
 
         LoginApi loginApi = new LoginApi(this);
         loginApi.loginToServer(username, password);
+        ConnectToFirebaseApi connectToFirebaseApi = new ConnectToFirebaseApi();
+        String token = FirebaseInstanceId.getInstance().getToken();
+        connectToFirebaseApi.connectToFB(username, token);
     }
 
     public void onSuccessfulLogin() {

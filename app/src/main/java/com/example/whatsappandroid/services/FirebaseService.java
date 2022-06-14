@@ -1,8 +1,6 @@
 package com.example.whatsappandroid.services;
 
-import android.app.Service;
-import android.content.Intent;
-import android.os.IBinder;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -16,6 +14,16 @@ public class FirebaseService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
-        int x = 0;
+        Log.d("From", "From: " + remoteMessage.getFrom());
+
+        // Check if message contains a data payload.
+        if (remoteMessage.getData().size() > 0) {
+            Log.d("Data", "Message data payload: " + remoteMessage.getData());
+        }
+
+        // Check if message contains a notification payload.
+        if (remoteMessage.getNotification() != null) {
+            Log.d("Body", "Message Notification Body: " + remoteMessage.getNotification().getBody());
+        }
     }
 }
