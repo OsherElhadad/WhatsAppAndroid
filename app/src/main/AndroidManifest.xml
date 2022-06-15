@@ -35,7 +35,6 @@
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
         <service
             android:name=".services.FirebaseService"
             android:enabled="true"
@@ -46,6 +45,9 @@
         </service>
 
         <activity
+            android:name=".activities.contactsActivity.MainContactsActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.SettingsActivity"
             tools:ignore="MissingClass" />
         <activity
@@ -55,11 +57,13 @@
             android:name=".activities.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.AddContactActivity"
-            android:exported="false" />
+            android:name=".activities.contactsActivity.AddContactFragment"
+            android:exported="false"
+            tools:ignore="Instantiatable" />
         <activity
-            android:name=".activities.ContactsListActivity"
-            android:exported="false" />
+            android:name=".activities.contactsActivity.ContactsListFragment"
+            android:exported="false"
+            tools:ignore="Instantiatable" />
         <activity
             android:name=".activities.LoginActivity"
             android:exported="true">

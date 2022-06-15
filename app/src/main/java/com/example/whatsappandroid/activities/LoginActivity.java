@@ -10,6 +10,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.whatsappandroid.R;
+import com.example.whatsappandroid.activities.contactsActivity.MainContactsActivity;
 import com.example.whatsappandroid.api.ConnectToFirebaseApi;
 import com.example.whatsappandroid.api.LoginApi;
 import com.example.whatsappandroid.loggable;
@@ -114,7 +115,7 @@ public class LoginActivity extends AppCompatActivity implements loggable {
     public void onSuccessfulLogin() {
         Toast.makeText(this, "Welcome again " + Info.loggedUser + "!",
                 Toast.LENGTH_SHORT).show();
-        Intent contactsListIntent = new Intent(this, ContactsListActivity.class);
+        Intent contactsListIntent = new Intent(this, MainContactsActivity.class);
         startActivity(contactsListIntent);
     }
 

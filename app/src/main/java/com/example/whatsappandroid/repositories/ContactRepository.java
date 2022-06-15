@@ -54,7 +54,7 @@ public class ContactRepository {
 
     }
 
-    public MutableLiveData<List<Contact>> get() {
+    public MutableLiveData<List<Contact>> getContacts() {
         return contactListData;
     }
 

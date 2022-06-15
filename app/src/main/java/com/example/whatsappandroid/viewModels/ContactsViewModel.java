@@ -11,13 +11,12 @@ import java.util.List;
 public class ContactsViewModel extends ViewModel {
     private ContactRepository contactRepository;
     private LiveData<List<Contact>> contacts;
-
     public ContactsViewModel() {
         this.contactRepository = new ContactRepository();
-        this.contacts = contactRepository.get();
+        this.contacts = contactRepository.getContacts();
     }
 
-    public LiveData<List<Contact>> get() {
+    public LiveData<List<Contact>> getContacts() {
         return contacts;
     }
 

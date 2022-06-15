@@ -23,7 +23,8 @@ public class ConnectToFirebaseApi {
     public ConnectToFirebaseApi() {
         Gson gson = new GsonBuilder().setLenient().create();
         retrofit = new Retrofit.Builder()
-                .baseUrl(Info.context.getString(R.string.BaseUrl))
+                .baseUrl(Info.context.getString(R.string.basicServerUrl) +
+                        Info.context.getString(R.string.myServerPort) + "/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         webServiceAPI = retrofit.create(WebServiceAPI.class);
