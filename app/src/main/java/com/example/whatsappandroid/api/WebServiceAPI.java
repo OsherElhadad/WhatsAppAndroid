@@ -15,8 +15,8 @@ import retrofit2.http.POST;
 
 public interface WebServiceAPI {
 
-    @POST
-    Call<Void> postUser(@Body User user);
+    @POST("api/Users")
+    Call<JsonPrimitive> postUser(@Body User user);
 
     @POST("api/LogIn")
     Call<JsonPrimitive> logIn(@Body Login login);

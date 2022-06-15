@@ -11,6 +11,7 @@ import com.example.whatsappandroid.models.User;
 import com.example.whatsappandroid.utilities.Info;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonPrimitive;
 
 import java.util.List;
 
@@ -35,18 +36,24 @@ public class UserAPI {
         webServiceAPI = retrofit.create(WebServiceAPI.class);
     }
 
-    public void addUser(String username, String password, MutableLiveData<Boolean> isSucceededData) {
+    public void addUser(String username, String password,
+                        MutableLiveData<Boolean> isSucceededData) {
         User user = new User(username, password);
-        Call<Void> call = webServiceAPI.postUser(user);
-        call.enqueue(new Callback<Void>() {
+        Call<JsonPrimitive> call = webServiceAPI.postUser(user);
+        call.enqueue(new Callback<JsonPrimitive>() {
             @Override
-            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
-                isSucceededData.setValue(false);
-                isSucceededData.setValue(true);
+            public void onResponse(@NonNull Call<JsonPrimitive> call,
+                                   @NonNull Response<JsonPrimitive> response) {
+                if (response.isSuccessful() && response.code() == 200 && response.body() != null) {
+                    String token = response.body().toString();
+                    Info.loggerUserToken = token.substring(1, token.length() - 1);
+                    isSucceededData.setValue(false);
+                    isSucceededData.setValue(true);
+                }
             }
 
             @Override
-            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<JsonPrimitive> call, @NonNull Throwable t) {
                 isSucceededData.setValue(false);
                 Log.e("onFailure: ", t.getMessage());
             }

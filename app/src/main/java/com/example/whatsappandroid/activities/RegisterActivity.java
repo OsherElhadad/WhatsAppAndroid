@@ -22,6 +22,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.whatsappandroid.R;
 import com.example.whatsappandroid.activities.contactsActivity.ContactsListFragment;
+import com.example.whatsappandroid.activities.contactsActivity.MainContactsActivity;
 import com.example.whatsappandroid.utilities.Info;
 import com.example.whatsappandroid.viewModels.RegisterViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -59,7 +60,7 @@ public class RegisterActivity extends AppCompatActivity {
             if (isSucceeded) {
                 String input = "Welcome " + username + "!";
                 Toast.makeText(this, input, Toast.LENGTH_SHORT).show();
-                Intent contactsListIntent = new Intent(this, ContactsListFragment.class);
+                Intent contactsListIntent = new Intent(this, MainContactsActivity.class);
 
                 // pass username to the contacts list screen
                 Info.loggedUser = username;
