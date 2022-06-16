@@ -30,4 +30,7 @@ public interface MessageDao {
 
     @Delete
     void delete(Message... Messages);
+
+    @Query("DELETE FROM message")
+    void clear();
 }

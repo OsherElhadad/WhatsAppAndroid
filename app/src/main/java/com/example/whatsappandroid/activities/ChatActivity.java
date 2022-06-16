@@ -48,11 +48,6 @@ public class ChatActivity extends AppCompatActivity {
 
             messagesViewModel.add(message);
 
-            Message message1 = new Message("Hard Coded Replay - Test", time, false,
-                    Info.contactId, Info.loggedUser);
-
-            messagesViewModel.add(message1);
-
         });
 
     }

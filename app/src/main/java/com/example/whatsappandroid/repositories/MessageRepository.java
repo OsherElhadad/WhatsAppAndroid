@@ -6,7 +6,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.Room;
 
+import com.example.whatsappandroid.api.MessageApi;
 import com.example.whatsappandroid.db.AppDB;
+import com.example.whatsappandroid.db.ContactDao;
 import com.example.whatsappandroid.db.MessageDao;
 import com.example.whatsappandroid.models.Message;
 import com.example.whatsappandroid.utilities.Info;
@@ -14,6 +16,8 @@ import com.example.whatsappandroid.utilities.Info;
 import java.util.List;
 
 public class MessageRepository {
+    private MessageApi messageApi;
+    private ContactDao contactDao;
     private MessageDao messageDao;
     private MessageListData messagesListData;
 
@@ -21,6 +25,8 @@ public class MessageRepository {
         AppDB appDB = Room.databaseBuilder(Info.context, AppDB.class, Info.loggedUser)
                 .allowMainThreadQueries().fallbackToDestructiveMigration().build();
         this.messageDao = appDB.messageDao();
+        this.contactDao = appDB.contactDao();
+        this.messageApi = new MessageApi(this.messageDao);
         this.messagesListData = new MessageListData();
     }
 
@@ -33,8 +39,13 @@ public class MessageRepository {
         @Override
         protected void onActive() {
             super.onActive();
-            setMessagesListDataWithDbMessages();
+            setMessagesListDataWithApiServerMessages();
         }
+    }
+
+    protected void setMessagesListDataWithApiServerMessages() {
+        this.messageApi.getAllMessages(this.messagesListData,
+                "Bearer " + Info.loggerUserToken, Info.contactId);
     }
 
     protected void setMessagesListDataWithDbMessages() {
@@ -49,8 +60,11 @@ public class MessageRepository {
     }
 
     public void add(Message message) {
-        this.messageDao.insert(message);
-        setMessagesListDataWithDbMessages();
+        messageApi.addMessage(this.messagesListData, "Bearer " + Info.loggerUserToken,
+                Info.loggedUser,  this.contactDao.get(Info.contactId).getServerPort(),
+                Info.contactId, message);
+//        this.messageDao.insert(message);
+//        setMessagesListDataWithDbMessages();
     }
 
     public void delete(Message message) {
