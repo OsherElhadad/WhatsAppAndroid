@@ -42,9 +42,7 @@ public class ChatActivity extends AppCompatActivity {
 
             messageET.setText("");
 
-            String time = "Time";
-
-            Message message = new Message(content, time, true, Info.contactId, Info.loggedUser);
+            Message message = new Message(content, null, true, Info.contactId, Info.loggedUser);
 
             messagesViewModel.add(message);
 
@@ -59,7 +57,6 @@ public class ChatActivity extends AppCompatActivity {
 
         messagesViewModel.get().observe(this, messages -> {
             adapter.setMessageList(messages);
-//            adapter.notifyDataSetChanged();
         });
 
         messagesListRV.setAdapter(adapter);

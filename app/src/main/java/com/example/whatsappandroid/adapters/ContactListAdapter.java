@@ -54,14 +54,13 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
             viewHolder.imageView.setImageResource(contacts.get(position).getPictureId());
             viewHolder.userName.setText(contacts.get(position).getName());
             viewHolder.lastMsg.setText(contacts.get(position).getLast());
-            viewHolder.time.setText(contacts.get(position).getLastdate());
+            viewHolder.time.setText(contacts.get(position).getLastdate().substring(11,16));
             viewHolder.itemView.setOnClickListener(view -> {
                 listener.onItemClick(contacts.get(position));
             });
         }
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         if (this.contacts == null)

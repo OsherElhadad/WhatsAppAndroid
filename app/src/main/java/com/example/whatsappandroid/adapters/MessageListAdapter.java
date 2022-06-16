@@ -59,13 +59,11 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         if (this.messages != null) {
-//            viewHolder.imageView.setImageResource(messages.get(position));
             viewHolder.content.setText(messages.get(position).getContent());
-            viewHolder.time.setText(messages.get(position).getCreated());
+            viewHolder.time.setText(messages.get(position).getCreated().substring(11, 16));
         }
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         if (this.messages == null)

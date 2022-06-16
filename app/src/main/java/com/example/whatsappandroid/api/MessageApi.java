@@ -81,7 +81,7 @@ public class MessageApi {
             @Override
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                 if (response.isSuccessful()) {
-                    addToMyServer(messages, message, token, contactUsername, username);
+                    addToMyServer(messages, message, token, contactUsername);
                 }
             }
 
@@ -93,7 +93,7 @@ public class MessageApi {
     }
 
     private void addToMyServer(MutableLiveData<List<Message>> messages, Message message,
-                               String userToken, String contactUsername, String username) {
+                               String userToken, String contactUsername) {
         ApiMessage postMessage = new ApiMessage(message.getContent());
         Call<Void> call = webServiceAPI.postMessage(contactUsername, postMessage, userToken);
         call.enqueue(new Callback<Void>() {
@@ -102,9 +102,10 @@ public class MessageApi {
 
                 if (response.isSuccessful()) {
                     messageDao.insert(message);
-                    List<Message> m = messages.getValue();
-                    m.add(message);
-                    messages.setValue(m);
+                    List<Message> newMessageList = messages.getValue();
+                    assert newMessageList != null;
+                    newMessageList.add(message);
+                    messages.setValue(newMessageList);
                 }
             }
 

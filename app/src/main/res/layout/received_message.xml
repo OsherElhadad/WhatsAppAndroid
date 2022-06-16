@@ -36,7 +36,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_4sdp"
-        android:textColor="@color/light_orange"
+        android:textColor="@color/black"
         android:textSize="@dimen/_10ssp"
         app:layout_constraintStart_toStartOf="@id/text_message"
         app:layout_constraintTop_toBottomOf="@id/text_message">
