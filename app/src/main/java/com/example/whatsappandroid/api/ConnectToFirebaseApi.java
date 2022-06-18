@@ -1,10 +1,7 @@
 package com.example.whatsappandroid.api;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
-import com.example.whatsappandroid.R;
 import com.example.whatsappandroid.models.UserFBToken;
 import com.example.whatsappandroid.utilities.Info;
 import com.google.gson.Gson;
@@ -23,8 +20,8 @@ public class ConnectToFirebaseApi {
     public ConnectToFirebaseApi() {
         Gson gson = new GsonBuilder().setLenient().create();
         retrofit = new Retrofit.Builder()
-                .baseUrl(Info.context.getString(R.string.basicServerUrl) +
-                        Info.context.getString(R.string.myServerPort) + "/")
+                .baseUrl(Info.baseUrlServer +
+                        Info.serverPort + "/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         webServiceAPI = retrofit.create(WebServiceAPI.class);
@@ -36,16 +33,10 @@ public class ConnectToFirebaseApi {
             @Override
             public void onResponse(@NonNull Call<Void> call,
                                    @NonNull Response<Void> response) {
-                if (response.code() == 200) {
-                    Log.e("Success", "created new token at the server");
-                } else {
-                    Log.e("Error", "error at the server while creating new token at the server");
-                }
             }
 
             @Override
             public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-                Log.e("Failure", "failure at the server while creating new token at the server");
             }
         });
     }

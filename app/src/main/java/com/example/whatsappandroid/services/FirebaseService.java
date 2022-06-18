@@ -31,6 +31,8 @@ public class FirebaseService extends FirebaseMessagingService {
         if (remoteMessage.getData().size() > 0) {
             Log.d("Data", "Message data payload: " + remoteMessage.getData());
             String typeGot = remoteMessage.getData().get(type);
+
+            // if got a new contact message, then show a proper notification
             if (typeGot.compareTo("Contact") == 0) {
                 if (remoteMessage.getNotification() != null) {
                     Log.d("Body", "Message Notification Body: " + remoteMessage.getNotification().getBody());
@@ -42,6 +44,8 @@ public class FirebaseService extends FirebaseMessagingService {
                     notificationManagerCompat.notify(contactsCounter++, builder.build());
                 }
             } else if (typeGot.compareTo("Message") == 0) {
+
+                // if got a new message message, then show a proper notification
                 if (remoteMessage.getNotification() != null) {
                     Log.d("Body", "Message Notification Body: " + remoteMessage.getNotification().getBody());
                     NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "2")

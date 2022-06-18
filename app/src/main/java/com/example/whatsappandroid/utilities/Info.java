@@ -10,6 +10,7 @@ import android.os.Build;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.room.Room;
 
+import com.example.whatsappandroid.R;
 import com.example.whatsappandroid.db.UsersDB;
 
 public class Info extends Application {
@@ -21,10 +22,14 @@ public class Info extends Application {
     public static String contactId;
     public static UsersDB usersDB;
     public static NotificationManagerCompat notificationManagerCompat;
+    public static String baseUrlServer;
+    public static String serverPort;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        baseUrlServer = this.getString(R.string.basicServerUrl);
+        serverPort = this.getString(R.string.myServerPort);
         context = getApplicationContext();
         loggedUser = null;
         loggerUserToken = null;
@@ -37,6 +42,8 @@ public class Info extends Application {
 
     public void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            // channel for contacts
             CharSequence name = "API contacts channel";
             String description = "channel with the api server for new contacts";
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
@@ -46,6 +53,7 @@ public class Info extends Application {
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
 
+            // channel for messages
             name = "API messages channel";
             description = "channel with the api server for new messages";
             importance = NotificationManager.IMPORTANCE_DEFAULT;

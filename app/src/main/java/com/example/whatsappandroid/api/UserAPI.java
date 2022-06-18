@@ -1,12 +1,10 @@
 package com.example.whatsappandroid.api;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.whatsappandroid.R;
 import com.example.whatsappandroid.db.UserDao;
 import com.example.whatsappandroid.models.User;
 import com.example.whatsappandroid.utilities.Info;
@@ -29,8 +27,8 @@ public class UserAPI {
         Gson gson = new GsonBuilder().setLenient().create();
         userDao = Info.usersDB.userDao();
         retrofit = new Retrofit.Builder()
-                .baseUrl(Info.context.getString(R.string.basicServerUrl) +
-                        Info.context.getString(R.string.myServerPort) + "/")
+                .baseUrl(Info.baseUrlServer +
+                        Info.serverPort + "/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         webServiceAPI = retrofit.create(WebServiceAPI.class);
@@ -45,6 +43,8 @@ public class UserAPI {
             public void onResponse(@NonNull Call<JsonPrimitive> call,
                                    @NonNull Response<JsonPrimitive> response) {
                 if (response.isSuccessful() && response.code() == 200 && response.body() != null) {
+
+                    // add new user to the room
                     String token = response.body().toString();
                     Info.loggerUserToken = token.substring(1, token.length() - 1);
                     User user = new User(username, password, nickname, picture);
@@ -57,7 +57,6 @@ public class UserAPI {
             @Override
             public void onFailure(@NonNull Call<JsonPrimitive> call, @NonNull Throwable t) {
                 isSucceededData.setValue(false);
-                Log.e("onFailure: ", t.getMessage());
             }
         });
     }
@@ -74,6 +73,7 @@ public class UserAPI {
         return user;
     }
 
+    // get user from room async
     private class RoomUsers extends AsyncTask<Void, Void, User> {
         private UserDao userDao;
         private String userId;

@@ -1,10 +1,7 @@
 package com.example.whatsappandroid.api;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
-import com.example.whatsappandroid.R;
 import com.example.whatsappandroid.Successable;
 import com.example.whatsappandroid.models.Login;
 import com.example.whatsappandroid.utilities.Info;
@@ -26,8 +23,8 @@ public class LoginApi {
     public LoginApi(Successable s) {
         Gson gson = new GsonBuilder().setLenient().create();
         retrofit = new Retrofit.Builder()
-                .baseUrl(Info.context.getString(R.string.basicServerUrl) +
-                        Info.context.getString(R.string.myServerPort) + "/")
+                .baseUrl(Info.baseUrlServer +
+                        Info.serverPort + "/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         webServiceAPI = retrofit.create(WebServiceAPI.class);
@@ -54,7 +51,6 @@ public class LoginApi {
 
             @Override
             public void onFailure(@NonNull Call<JsonPrimitive> call, @NonNull Throwable t) {
-                Log.e("E",t.getMessage());
                 Info.loggedUser = null;
                 Info.loggerUserToken = null;
             }

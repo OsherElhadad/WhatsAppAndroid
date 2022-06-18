@@ -1,7 +1,5 @@
 package com.example.whatsappandroid.api;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
@@ -32,8 +30,8 @@ public class MessageApi {
     public MessageApi(MessageDao messageDao) {
         Gson gson = new GsonBuilder().setLenient().create();
         this.retrofit = new Retrofit.Builder()
-                .baseUrl(Info.context.getString(R.string.basicServerUrl) +
-                        Info.context.getString(R.string.myServerPort) + "/")
+                .baseUrl(Info.baseUrlServer +
+                        Info.serverPort + "/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         this.webServiceAPI = this.retrofit.create(WebServiceAPI.class);
@@ -53,6 +51,7 @@ public class MessageApi {
                         return;
                     }
 
+                    // add the all messages to the dao
                     for (Message message : response.body()) {
                         messageDao.insert(message);
                     }
@@ -62,17 +61,16 @@ public class MessageApi {
 
             @Override
             public void onFailure(@NonNull Call<List<Message>> call, @NonNull Throwable t) {
-                Log.e("E", t.getMessage());
             }
         });
     }
 
     public void addMessage(MutableLiveData<List<Message>> messages, String token, String username,
-                           String contactServerPort, String contactUsername, Message message) {
+                           String contactServer, String contactUsername, Message message) {
         Transfer transfer = new Transfer(username, contactUsername, message.getContent());
         Retrofit contactRetrofit = new Retrofit.Builder()
-                .baseUrl(Info.context.getString(R.string.basicServerUrl) +
-                        contactServerPort + "/")
+                .baseUrl(Info.context.getString(R.string.http_request) +
+                        contactServer + "/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         WebServiceAPI contactServerApi = contactRetrofit.create(WebServiceAPI.class);
@@ -80,15 +78,15 @@ public class MessageApi {
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
-                Log.e("status 1: ", Integer.toString(response.code()));
                 if (response.isSuccessful()) {
+
+                    // send after transfer, post for the message
                     addToMyServer(messages, message, token, contactUsername);
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-                Log.e("onFailure: ", t.getMessage());
             }
         });
     }
@@ -100,8 +98,9 @@ public class MessageApi {
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
-                Log.e("status 2: ", Integer.toString(response.code()));
                 if (response.isSuccessful()) {
+
+                    // add the new message to the list of messages
                     Calendar c = Calendar.getInstance();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     String strDate = sdf.format(c.getTime());
@@ -116,7 +115,6 @@ public class MessageApi {
 
             @Override
             public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-                Log.e("onFailure: ", t.getMessage());
             }
         });
     }

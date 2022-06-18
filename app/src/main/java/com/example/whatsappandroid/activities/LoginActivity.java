@@ -27,6 +27,7 @@ public class LoginActivity extends AppCompatActivity implements Successable {
     private String username;
     private String password;
     private FloatingActionButton settings;
+    private String fbToken;
 
     @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
     @Override
@@ -107,12 +108,14 @@ public class LoginActivity extends AppCompatActivity implements Successable {
     public void onSuccessfulLogin() {
         Toast.makeText(this, "Welcome again " + Info.loggedUser + "!",
                 Toast.LENGTH_SHORT).show();
+
+        // if logged in successfully then we send to the server his token.
         ConnectToFirebaseApi connectToFirebaseApi = new ConnectToFirebaseApi();
         FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(LoginActivity.this,
                 instanceIdResult -> {
-                    String t = instanceIdResult.getToken();
+                    fbToken = instanceIdResult.getToken();
                 });
-        String fbToken = FirebaseInstanceId.getInstance().getToken();
+        fbToken = FirebaseInstanceId.getInstance().getToken();
         connectToFirebaseApi.connectToFB(Info.loggedUser, fbToken);
         Intent contactsListIntent = new Intent(this, MainContactsActivity.class);
         startActivity(contactsListIntent);

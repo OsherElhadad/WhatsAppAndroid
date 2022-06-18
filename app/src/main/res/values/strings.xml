@@ -20,4 +20,10 @@
     <string name="dark_mode">Dark Mode</string>
     <string name="basicServerUrl">http://10.0.2.2:</string>
     <string name="http_request">http://</string>
+    <string name="BasicUrl">BasicUrl</string>
+    <string name="summary_url">Default basic server url</string>
+    <string name="title_url">Server Url</string>
+    <string name="BasicPort">BasicPort</string>
+    <string name="summary_port">Default server port</string>
+    <string name="title_port">Server Port</string>
 </resources>

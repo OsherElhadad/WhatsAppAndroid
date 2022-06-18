@@ -8,6 +8,18 @@
             android:summary="@string/dark_summery"
             android:title="@string/dark_mode" />
 
+        <EditTextPreference
+            android:defaultValue="@string/basicServerUrl"
+            android:key="@string/BasicUrl"
+            android:summary="@string/summary_url"
+            android:title="@string/title_url" />
+
+        <EditTextPreference
+            android:defaultValue="@string/myServerPort"
+            android:key="@string/BasicPort"
+            android:summary="@string/summary_port"
+            android:title="@string/title_port" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>

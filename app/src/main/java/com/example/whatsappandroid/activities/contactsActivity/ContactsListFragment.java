@@ -87,6 +87,8 @@ public class ContactsListFragment extends Fragment {
     }
 
     private void setPictureHeader(View view) {
+
+        // check if this user is in our room db as a user and get his picture
         ImageView userPictureTV = view.findViewById(R.id.profile_image_user);
         if (userViewModel.getUser(Info.loggedUser) != null) {
             byte[] picture = userViewModel.getUser(Info.loggedUser).getPicture();

@@ -72,13 +72,16 @@ public class MessageListAdapter extends RecyclerView.Adapter<MessageListAdapter.
         if (this.messages != null) {
             viewHolder.content.setText(messages.get(position).getContent());
             if (messages.get(position).getCreated() != null) {
+
+                // put only the hour and minute if it is from today or with the date else
                 Calendar c = Calendar.getInstance();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 String strDate = sdf.format(c.getTime());
-                if (strDate == messages.get(position).getCreated().substring(11, 16)) {
+                if (strDate.compareTo(messages.get(position).getCreated().substring(0, 10)) == 0) {
                     viewHolder.time.setText(messages.get(position).getCreated().substring(11, 16));
                 } else {
-                    viewHolder.time.setText(messages.get(position).getCreated().substring(0, 16));
+                    viewHolder.time.setText(messages.get(position).getCreated().substring(0, 10) +
+                            messages.get(position).getCreated().substring(11, 16));
                 }
             }
             if (getItemViewType(position) == 1 && bitmap != null) {

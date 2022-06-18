@@ -45,15 +45,13 @@ public class ChatActivity extends AppCompatActivity {
         sendBtn.setOnClickListener(v -> {
             TextView messageET = findViewById(R.id.et_send_msg_chat);
             String content = messageET.getText().toString();
-
             if (content.equals("")) {
                 return;
             }
 
+            // set the textbox to be null
             messageET.setText("");
-
             Message message = new Message(content, null, true, Info.contactId, Info.loggedUser);
-
             messagesViewModel.add(message);
 
         });
@@ -84,6 +82,7 @@ public class ChatActivity extends AppCompatActivity {
         Intent currentIntent = getIntent();
         Bundle props = currentIntent.getExtras();
 
+        // check if this contact is in our room db as a user and get his picture
         ImageView contactPictureTV = findViewById(R.id.profile_image_chat);
         if (userViewModel.getUser(props.get("contactName").toString()) != null) {
             byte[] picture = userViewModel.getUser(props.get("contactName").toString()).getPicture();

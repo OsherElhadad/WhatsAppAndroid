@@ -59,20 +59,22 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         if (this.contacts != null) {
-            // viewHolder.imageView.setImageResource(contacts.get(position).getPictureId());
             setPictureContact(viewHolder, position);
             viewHolder.userName.setText(contacts.get(position).getName());
             viewHolder.lastMsg.setText(contacts.get(position).getLast());
             if (contacts.get(position).getLastdate() == null) {
                 viewHolder.time.setText("new");
             } else {
+
+                // put only the hour and minute if it is from today or with the date else
                 Calendar c = Calendar.getInstance();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 String strDate = sdf.format(c.getTime());
-                if (strDate == contacts.get(position).getLastdate().substring(0, 10)) {
+                if (strDate.compareTo(contacts.get(position).getLastdate().substring(0, 10)) == 0) {
                     viewHolder.time.setText(contacts.get(position).getLastdate().substring(11, 16));
                 } else {
-                    viewHolder.time.setText(contacts.get(position).getLastdate().substring(0, 16));
+                    viewHolder.time.setText(contacts.get(position).getLastdate().substring(0, 10) +
+                            contacts.get(position).getLastdate().substring(11, 16));
                 }
             }
             viewHolder.itemView.setOnClickListener(view -> {

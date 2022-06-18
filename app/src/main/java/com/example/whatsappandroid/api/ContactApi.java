@@ -1,7 +1,5 @@
 package com.example.whatsappandroid.api;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
@@ -30,8 +28,8 @@ public class ContactApi {
     public ContactApi(ContactDao contactDao) {
         Gson gson = new GsonBuilder().setLenient().create();
         this.retrofit = new Retrofit.Builder()
-                .baseUrl(Info.context.getString(R.string.basicServerUrl) +
-                        Info.context.getString(R.string.myServerPort) + "/")
+                .baseUrl(Info.baseUrlServer +
+                        Info.serverPort + "/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         this.webServiceAPI = this.retrofit.create(WebServiceAPI.class);
@@ -54,6 +52,7 @@ public class ContactApi {
                         return;
                     }
 
+                    // add the all contacts to the dao
                     for (Contact contact : response.body()) {
                         contactDao.insert(contact);
                     }
@@ -63,7 +62,6 @@ public class ContactApi {
 
             @Override
             public void onFailure(@NonNull Call<List<Contact>> call, @NonNull Throwable t) {
-                Log.e("E", t.getMessage());
             }
         });
     }
@@ -72,8 +70,8 @@ public class ContactApi {
                            MutableLiveData<List<Contact>> contacts) {
         Invitation invitation = new Invitation(username, contact.getId(), contact.getServer());
         Retrofit contactRetrofit = new Retrofit.Builder()
-                .baseUrl(Info.context.getString(R.string.basicServerUrl) +
-                        contact.getServerPort() + "/")
+                .baseUrl(Info.context.getString(R.string.http_request) +
+                        contact.getServer() + "/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         WebServiceAPI contactServerApi = contactRetrofit.create(WebServiceAPI.class);
@@ -82,6 +80,8 @@ public class ContactApi {
             @Override
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                     if (response.isSuccessful()) {
+
+                        // send after invitation, post for the contact
                         addToMyServer(contact, token, contacts);
                     } else if(successable != null){
                         successable.onFailedLogin();
@@ -93,7 +93,6 @@ public class ContactApi {
                 if(successable != null) {
                     successable.onFailedLogin();
                 }
-                Log.e("onFailure: ", t.getMessage());
             }
         });
     }
@@ -106,6 +105,8 @@ public class ContactApi {
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
 
                     if (response.isSuccessful()) {
+
+                        // add the new contact to the list of contacts
                         successable.onSuccessfulLogin();
                         contactDao.insert(contact);
                         List<Contact> newContacts = contacts.getValue();
@@ -121,8 +122,6 @@ public class ContactApi {
                 if(successable != null) {
                     successable.onFailedLogin();
                 }
-
-                Log.e("onFailure: ", t.getMessage());
             }
         });
     }

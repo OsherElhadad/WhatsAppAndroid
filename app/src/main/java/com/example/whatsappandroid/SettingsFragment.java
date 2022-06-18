@@ -9,6 +9,8 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import com.example.whatsappandroid.utilities.Info;
+
 @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
 public class SettingsFragment extends PreferenceFragment {
 
@@ -17,17 +19,32 @@ public class SettingsFragment extends PreferenceFragment {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
         Preference p = findPreference(getString(R.string.mode));
-        if (p == null) {
-            return;
+        if (p != null) {
+            p.setOnPreferenceChangeListener((preference, newValue) -> {
+                Log.i("newValue", newValue.toString());
+                if (newValue.toString() == "false") {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                }
+                return true;
+            });
         }
-        p.setOnPreferenceChangeListener((preference, newValue) -> {
-            Log.i("newValue", newValue.toString());
-            if (newValue.toString() == "false") {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            }
-            return true;
-        });
+
+        p = findPreference(getString(R.string.BasicUrl));
+        if (p != null) {
+            p.setOnPreferenceChangeListener((preference, newValue) -> {
+                Info.baseUrlServer = newValue.toString();
+                return true;
+            });
+        }
+
+        p = findPreference(getString(R.string.BasicPort));
+        if (p != null) {
+            p.setOnPreferenceChangeListener((preference, newValue) -> {
+                Info.serverPort = newValue.toString();
+                return true;
+            });
+        }
     }
 }

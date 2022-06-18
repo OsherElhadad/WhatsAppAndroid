@@ -49,6 +49,7 @@ public class RegisterActivity extends AppCompatActivity {
     private String password;
     private TextInputLayout repeatPasswordTIL;
     private String repeatPassword;
+    private String fbToken;
     private static final Pattern NAME_PATTERN = Pattern.compile("^[a-zA-Z0-9][a-zA-Z0-9]+$");
     private static final Pattern PASSWORD_PATTERN = Pattern.compile("^[a-zA-Z0-9!@#$%^&*():/_-]" +
             "[a-zA-Z0-9!@#$%^&*():/_-]+$");
@@ -64,12 +65,14 @@ public class RegisterActivity extends AppCompatActivity {
             if (isSucceeded) {
                 String input = "Welcome " + username + "!";
                 Toast.makeText(this, input, Toast.LENGTH_SHORT).show();
+
+                // if registered successfully then we send to the server his token.
+                ConnectToFirebaseApi connectToFirebaseApi = new ConnectToFirebaseApi();
                 FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(RegisterActivity.this,
                         instanceIdResult -> {
-                            String t = instanceIdResult.getToken();
+                            fbToken = instanceIdResult.getToken();
                         });
-                ConnectToFirebaseApi connectToFirebaseApi = new ConnectToFirebaseApi();
-                String fbToken = FirebaseInstanceId.getInstance().getToken();
+                fbToken = FirebaseInstanceId.getInstance().getToken();
                 connectToFirebaseApi.connectToFB(username, fbToken);
                 Intent contactsListIntent = new Intent(this, MainContactsActivity.class);
 
@@ -86,6 +89,8 @@ public class RegisterActivity extends AppCompatActivity {
     private void setListeners() {
         registerBtn.setOnClickListener(v -> {
             if(confirmInput() == 1) {
+
+                // pass to the viewmodel the username password nickname and picture if has
                 byte[] byteArrayPic = null;
                 if (picture != null) {
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -154,6 +159,8 @@ public class RegisterActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
         builder.setTitle("Add Photo");
         builder.setItems(options, (dialog, item) -> {
+
+            // if choose 'Take Photo' then ask for permissions to the camera and take a picture
             if (options[item].equals("Take Photo")) {
                 try {
                     Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -171,9 +178,10 @@ public class RegisterActivity extends AppCompatActivity {
                         startActivityForResult(takePictureIntent, 1);
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
                 }
             } else if (options[item].equals("Choose from Gallery")) {
+
+                // if choose 'Choose from Gallery; then ask for permissions to the Files and choose a picture
                 try {
                     if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
@@ -193,7 +201,6 @@ public class RegisterActivity extends AppCompatActivity {
                         startActivityForResult(intent, 2);
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
                 }
             } else if (options[item].equals("Cancel")) {
                 dialog.dismiss();
@@ -206,6 +213,8 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
+
+            // if took a picture then upload this picture to the page
             if (requestCode == 1) {
                 try {
                     Bundle extras = data.getExtras();
@@ -216,6 +225,8 @@ public class RegisterActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             } else if (requestCode == 2) {
+
+                // if choose a picture then upload this picture from the phone to the page
                 try {
                     Uri selectedImage = data.getData();
                     String[] filePath = {MediaStore.Images.Media.DATA};
