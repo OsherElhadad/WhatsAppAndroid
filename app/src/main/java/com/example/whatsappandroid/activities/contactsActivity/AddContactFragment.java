@@ -13,12 +13,13 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.whatsappandroid.R;
+import com.example.whatsappandroid.Successable;
 import com.example.whatsappandroid.models.Contact;
 import com.example.whatsappandroid.utilities.Info;
 import com.example.whatsappandroid.viewModels.ContactsViewModel;
 import com.google.android.material.textfield.TextInputLayout;
 
-public class AddContactFragment extends Fragment {
+public class AddContactFragment extends Fragment implements Successable {
     private Button btnAddContact;
     private ContactsViewModel contactsViewModel;
     private TextInputLayout contactUsernameTIL;
@@ -40,6 +41,7 @@ public class AddContactFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         findViews(view);
         contactsViewModel = new ViewModelProvider(requireActivity()).get(ContactsViewModel.class);
+        contactsViewModel.setSuccessable(this);
         setListeners();
     }
 
@@ -69,9 +71,6 @@ public class AddContactFragment extends Fragment {
 
                 contactsViewModel.add(newContact);
 
-                String input = "Contact " + contactNickname + " added successfully!";
-                Toast.makeText(getActivity(), input, Toast.LENGTH_SHORT).show();
-                getActivity().onBackPressed();
             }
         });
     }
@@ -119,5 +118,19 @@ public class AddContactFragment extends Fragment {
             return 0;
         }
         return 1;
+    }
+
+    @Override
+    public void onSuccessfulLogin() {
+        String input = "Contact " + contactNickname + " added successfully!";
+        Toast.makeText(getActivity(), input, Toast.LENGTH_SHORT).show();
+        getActivity().onBackPressed();
+    }
+
+    @Override
+    public void onFailedLogin() {
+        String input = "Something went wrong! :(";
+        Toast.makeText(getActivity(), input, Toast.LENGTH_SHORT).show();
+        getActivity().onBackPressed();
     }
 }

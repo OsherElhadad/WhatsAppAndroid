@@ -3,6 +3,7 @@ package com.example.whatsappandroid.viewModels;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.whatsappandroid.Successable;
 import com.example.whatsappandroid.models.Contact;
 import com.example.whatsappandroid.repositories.ContactRepository;
 
@@ -18,6 +19,10 @@ public class ContactsViewModel extends ViewModel {
 
     public LiveData<List<Contact>> getContacts() {
         return contacts;
+    }
+
+    public void setSuccessable(Successable successable) {
+        contactRepository.setSuccessable(successable);
     }
 
     public void add(Contact contact) {

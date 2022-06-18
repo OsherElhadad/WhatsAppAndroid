@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.whatsappandroid.R;
+import com.example.whatsappandroid.Successable;
 import com.example.whatsappandroid.db.ContactDao;
 import com.example.whatsappandroid.models.Contact;
 import com.example.whatsappandroid.models.Invitation;
@@ -25,7 +26,7 @@ public class ContactApi {
     private ContactDao contactDao;
     private Retrofit retrofit;
     private WebServiceAPI webServiceAPI;
-
+    private Successable successable;
     public ContactApi(ContactDao contactDao) {
         Gson gson = new GsonBuilder().setLenient().create();
         this.retrofit = new Retrofit.Builder()
@@ -35,6 +36,10 @@ public class ContactApi {
                 .build();
         this.webServiceAPI = this.retrofit.create(WebServiceAPI.class);
         this.contactDao = contactDao;
+    }
+
+    public void setSuccessable(Successable successable) {
+        this.successable = successable;
     }
 
     public void getAllContacts(MutableLiveData<List<Contact>> contacts, String token) {
@@ -76,15 +81,18 @@ public class ContactApi {
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
-
                     if (response.isSuccessful()) {
                         addToMyServer(contact, token, contacts);
+                    } else if(successable != null){
+                        successable.onFailedLogin();
                     }
-
             }
 
             @Override
             public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                if(successable != null) {
+                    successable.onFailedLogin();
+                }
                 Log.e("onFailure: ", t.getMessage());
             }
         });
@@ -98,16 +106,22 @@ public class ContactApi {
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
 
                     if (response.isSuccessful()) {
+                        successable.onSuccessfulLogin();
                         contactDao.insert(contact);
                         List<Contact> newContacts = contacts.getValue();
                         newContacts.add(contact);
                         contacts.postValue(newContacts);
+                    } else if(successable != null) {
+                        successable.onFailedLogin();
                     }
-
             }
 
             @Override
             public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                if(successable != null) {
+                    successable.onFailedLogin();
+                }
+
                 Log.e("onFailure: ", t.getMessage());
             }
         });

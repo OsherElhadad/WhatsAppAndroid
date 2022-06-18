@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.Room;
 
+import com.example.whatsappandroid.Successable;
 import com.example.whatsappandroid.api.ContactApi;
 import com.example.whatsappandroid.db.AppDB;
 import com.example.whatsappandroid.db.ContactDao;
@@ -20,7 +21,7 @@ public class ContactRepository {
 
     public ContactRepository() {
         AppDB appDB = Room.databaseBuilder(Info.context, AppDB.class, Info.loggedUser)
-                     .allowMainThreadQueries().fallbackToDestructiveMigration().build();
+                .allowMainThreadQueries().fallbackToDestructiveMigration().build();
         this.contactDao = appDB.contactDao();
         this.contactListData = new ContactListData();
 
@@ -50,9 +51,11 @@ public class ContactRepository {
 
 
     protected void setContactListDataWithDbContacts() {
+        contactListData.setValue(contactDao.getAllContacts());
+    }
 
-            contactListData.setValue(contactDao.getAllContacts());
-
+    public void setSuccessable(Successable successable) {
+        contactApi.setSuccessable(successable);
     }
 
     public MutableLiveData<List<Contact>> getContacts() {
@@ -63,9 +66,6 @@ public class ContactRepository {
 
         this.contactApi.addContact(contact, Info.loggedUser,
                 "Bearer " + Info.loggerUserToken, this.contactListData);
-
-//        this.contactDao.insert(contact);
-//        setContactListDataWithDbContacts();
     }
 
     public void delete(Contact contact) {
