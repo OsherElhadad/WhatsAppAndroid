@@ -21,7 +21,6 @@
             android:layout_width="75dp"
             android:layout_height="75dp"
             android:layout_marginStart="15dp"
-            android:background="#79839F"
             android:src="@drawable/ic_default_profile_pid" />
 
         <LinearLayout

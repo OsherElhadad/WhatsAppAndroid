@@ -1,17 +1,23 @@
 package com.example.whatsappandroid.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.whatsappandroid.models.Contact;
-import com.example.whatsappandroid.models.ContactWithMessages;
-import com.example.whatsappandroid.listeners.OnItemClickListener;
 import com.example.whatsappandroid.R;
+import com.example.whatsappandroid.listeners.OnItemClickListener;
+import com.example.whatsappandroid.models.Contact;
+import com.example.whatsappandroid.viewModels.UserViewModel;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 
@@ -20,6 +26,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     private LayoutInflater inflater;
     private List<Contact> contacts;
     private OnItemClickListener listener;
+    private UserViewModel userViewModel;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final ImageView imageView;
@@ -40,6 +47,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     public ContactListAdapter(Context context, OnItemClickListener listener) {
         this.inflater = LayoutInflater.from(context);
         this.listener = listener;
+        this.userViewModel = new UserViewModel();
     }
 
     @Override
@@ -51,13 +59,35 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         if (this.contacts != null) {
-            viewHolder.imageView.setImageResource(contacts.get(position).getPictureId());
+            // viewHolder.imageView.setImageResource(contacts.get(position).getPictureId());
+            setPictureContact(viewHolder, position);
             viewHolder.userName.setText(contacts.get(position).getName());
             viewHolder.lastMsg.setText(contacts.get(position).getLast());
-            viewHolder.time.setText(contacts.get(position).getLastdate().substring(11,16));
+            if (contacts.get(position).getLastdate() == null) {
+                viewHolder.time.setText("new");
+            } else {
+                Calendar c = Calendar.getInstance();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String strDate = sdf.format(c.getTime());
+                if (strDate == contacts.get(position).getLastdate().substring(0, 10)) {
+                    viewHolder.time.setText(contacts.get(position).getLastdate().substring(11, 16));
+                } else {
+                    viewHolder.time.setText(contacts.get(position).getLastdate().substring(0, 16));
+                }
+            }
             viewHolder.itemView.setOnClickListener(view -> {
                 listener.onItemClick(contacts.get(position));
             });
+        }
+    }
+
+    private void setPictureContact(ViewHolder viewHolder, final int position) {
+        if (userViewModel.getUser(contacts.get(position).getId()) != null) {
+            byte[] picture = userViewModel.getUser(contacts.get(position).getId()).getPicture();
+            if (picture != null) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(picture, 0, picture.length);
+                viewHolder.imageView.setImageBitmap(bitmap);
+            }
         }
     }
 

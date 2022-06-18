@@ -18,7 +18,7 @@ public class RegisterViewModel extends ViewModel {
         return isSucceeded;
     }
 
-    public void registerUser(String username, String password) {
-        registerRepository.addUser(username, password);
+    public void registerUser(String username, String password, String nickname, byte[] picture) {
+        registerRepository.addUser(username, password, nickname, picture);
     }
 }

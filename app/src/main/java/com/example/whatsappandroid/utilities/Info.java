@@ -4,6 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 
+import androidx.room.Room;
+
+import com.example.whatsappandroid.db.UsersDB;
+
 public class Info extends Application {
     @SuppressLint("StaticFieldLeak")
     public static Context context;
@@ -11,6 +15,7 @@ public class Info extends Application {
     public static String loggerUserToken;
     public static boolean isLogged;
     public static String contactId;
+    public static UsersDB usersDB;
 
     @Override
     public void onCreate() {
@@ -19,5 +24,7 @@ public class Info extends Application {
         loggedUser = null;
         loggerUserToken = null;
         isLogged = false;
+        usersDB = Room.databaseBuilder(getApplicationContext(), UsersDB.class, "user")
+                .allowMainThreadQueries().fallbackToDestructiveMigration().build();
     }
 }

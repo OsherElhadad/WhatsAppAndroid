@@ -1,5 +1,6 @@
 package com.example.whatsappandroid.api;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -13,8 +14,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonPrimitive;
 
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -22,12 +21,13 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class UserAPI {
-    private UserDao dao;
+    private UserDao userDao;
     Retrofit retrofit;
     WebServiceAPI webServiceAPI;
 
     public UserAPI() {
         Gson gson = new GsonBuilder().setLenient().create();
+        userDao = Info.usersDB.userDao();
         retrofit = new Retrofit.Builder()
                 .baseUrl(Info.context.getString(R.string.basicServerUrl) +
                         Info.context.getString(R.string.myServerPort) + "/")
@@ -36,7 +36,7 @@ public class UserAPI {
         webServiceAPI = retrofit.create(WebServiceAPI.class);
     }
 
-    public void addUser(String username, String password,
+    public void addUser(String username, String password, String nickname, byte[] picture,
                         MutableLiveData<Boolean> isSucceededData) {
         User user = new User(username, password);
         Call<JsonPrimitive> call = webServiceAPI.postUser(user);
@@ -47,6 +47,8 @@ public class UserAPI {
                 if (response.isSuccessful() && response.code() == 200 && response.body() != null) {
                     String token = response.body().toString();
                     Info.loggerUserToken = token.substring(1, token.length() - 1);
+                    User user = new User(username, password, nickname, picture);
+                    userDao.insert(user);
                     isSucceededData.setValue(false);
                     isSucceededData.setValue(true);
                 }
@@ -58,5 +60,32 @@ public class UserAPI {
                 Log.e("onFailure: ", t.getMessage());
             }
         });
+    }
+
+    public User getUser(String username) {
+        RoomUsers roomUsers = new RoomUsers(userDao, username);
+        User user;
+        try {
+            user = roomUsers.execute().get();
+        }
+        catch (Exception exception) {
+            user = null;
+        }
+        return user;
+    }
+
+    private class RoomUsers extends AsyncTask<Void, Void, User> {
+        private UserDao userDao;
+        private String userId;
+
+        public RoomUsers(UserDao userDao, String userId) {
+            this.userDao = userDao;
+            this.userId = userId;
+        }
+
+        @Override
+        protected User doInBackground(Void... voids) {
+            return userDao.get(userId);
+        }
     }
 }

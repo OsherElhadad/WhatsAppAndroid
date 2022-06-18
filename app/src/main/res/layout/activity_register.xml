@@ -113,8 +113,8 @@
 
         <ImageView
             android:id="@+id/viewImageProfilePhoto"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
             android:src="@drawable/ic_default_profile_pid" />
     </LinearLayout>
 

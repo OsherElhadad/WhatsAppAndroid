@@ -100,21 +100,20 @@ public class LoginActivity extends AppCompatActivity implements loggable {
     }
 
     public void login() {
-        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(LoginActivity.this,
-                instanceIdResult -> {
-                    String t = instanceIdResult.getToken();
-                });
-
         LoginApi loginApi = new LoginApi(this);
         loginApi.loginToServer(username, password);
-        ConnectToFirebaseApi connectToFirebaseApi = new ConnectToFirebaseApi();
-        String token = FirebaseInstanceId.getInstance().getToken();
-        connectToFirebaseApi.connectToFB(username, token);
     }
 
     public void onSuccessfulLogin() {
         Toast.makeText(this, "Welcome again " + Info.loggedUser + "!",
                 Toast.LENGTH_SHORT).show();
+        ConnectToFirebaseApi connectToFirebaseApi = new ConnectToFirebaseApi();
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(LoginActivity.this,
+                instanceIdResult -> {
+                    String t = instanceIdResult.getToken();
+                });
+        String fbToken = FirebaseInstanceId.getInstance().getToken();
+        connectToFirebaseApi.connectToFB(Info.loggedUser, fbToken);
         Intent contactsListIntent = new Intent(this, MainContactsActivity.class);
         startActivity(contactsListIntent);
     }

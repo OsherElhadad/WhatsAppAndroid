@@ -65,7 +65,7 @@ public class ContactApi {
 
     public void addContact(Contact contact, String username, String token,
                            MutableLiveData<List<Contact>> contacts) {
-        Invitation invitation = new Invitation(username, contact.getName(), contact.getServer());
+        Invitation invitation = new Invitation(username, contact.getId(), contact.getServer());
         Retrofit contactRetrofit = new Retrofit.Builder()
                 .baseUrl(Info.context.getString(R.string.basicServerUrl) +
                         contact.getServerPort() + "/")
@@ -99,7 +99,9 @@ public class ContactApi {
 
                     if (response.isSuccessful()) {
                         contactDao.insert(contact);
-                        contacts.setValue(contactDao.getAllContacts());
+                        List<Contact> newContacts = contacts.getValue();
+                        newContacts.add(contact);
+                        contacts.postValue(newContacts);
                     }
 
             }

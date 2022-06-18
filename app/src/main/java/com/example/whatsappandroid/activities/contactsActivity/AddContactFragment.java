@@ -64,7 +64,6 @@ public class AddContactFragment extends Fragment {
 
         btnAddContact.setOnClickListener(v -> {
             if(confirmInput() == 1) {
-
                 Contact newContact = new Contact(contactUsername, contactNickname, contactServer,
                         null, null, Info.loggedUser);
 

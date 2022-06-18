@@ -21,17 +21,20 @@ import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.whatsappandroid.R;
-import com.example.whatsappandroid.activities.contactsActivity.ContactsListFragment;
 import com.example.whatsappandroid.activities.contactsActivity.MainContactsActivity;
+import com.example.whatsappandroid.api.ConnectToFirebaseApi;
 import com.example.whatsappandroid.utilities.Info;
 import com.example.whatsappandroid.viewModels.RegisterViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.iid.FirebaseInstanceId;
 
+import java.io.ByteArrayOutputStream;
 import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
     private RegisterViewModel registerViewModel;
+    private Bitmap picture;
     private ImageView viewImage;
     private Button b;
     private Button registerBtn;
@@ -54,12 +57,20 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        picture = null;
         registerViewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
 
         registerViewModel.get().observe(this, isSucceeded -> {
             if (isSucceeded) {
                 String input = "Welcome " + username + "!";
                 Toast.makeText(this, input, Toast.LENGTH_SHORT).show();
+                FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(RegisterActivity.this,
+                        instanceIdResult -> {
+                            String t = instanceIdResult.getToken();
+                        });
+                ConnectToFirebaseApi connectToFirebaseApi = new ConnectToFirebaseApi();
+                String fbToken = FirebaseInstanceId.getInstance().getToken();
+                connectToFirebaseApi.connectToFB(username, fbToken);
                 Intent contactsListIntent = new Intent(this, MainContactsActivity.class);
 
                 // pass username to the contacts list screen
@@ -75,8 +86,16 @@ public class RegisterActivity extends AppCompatActivity {
     private void setListeners() {
         registerBtn.setOnClickListener(v -> {
             if(confirmInput() == 1) {
+                byte[] byteArrayPic = null;
+                if (picture != null) {
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    picture.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                    byteArrayPic = baos.toByteArray();
+                }
                 registerViewModel.registerUser(usernameTIL.getEditText().getText().toString().trim(),
-                        passwordTIL.getEditText().getText().toString().trim());
+                        passwordTIL.getEditText().getText().toString().trim(),
+                        nicknameTIL.getEditText().getText().toString().trim(),
+                        byteArrayPic);
             }
         });
 
@@ -192,6 +211,7 @@ public class RegisterActivity extends AppCompatActivity {
                     Bundle extras = data.getExtras();
                     Bitmap imageBitmap = (Bitmap) extras.get("data");
                     viewImage.setImageBitmap(imageBitmap);
+                    picture = imageBitmap;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -206,6 +226,7 @@ public class RegisterActivity extends AppCompatActivity {
                     c.close();
                     Bitmap thumbnail = (BitmapFactory.decodeFile(picturePath));
                     viewImage.setImageBitmap(thumbnail);
+                    picture = thumbnail;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

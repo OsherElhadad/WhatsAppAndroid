@@ -8,14 +8,14 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.whatsappandroid.R;
 import com.example.whatsappandroid.db.MessageDao;
 import com.example.whatsappandroid.models.ApiMessage;
-import com.example.whatsappandroid.models.Contact;
-import com.example.whatsappandroid.models.Invitation;
 import com.example.whatsappandroid.models.Message;
 import com.example.whatsappandroid.models.Transfer;
 import com.example.whatsappandroid.utilities.Info;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import retrofit2.Call;
@@ -80,6 +80,7 @@ public class MessageApi {
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                Log.e("status 1: ", Integer.toString(response.code()));
                 if (response.isSuccessful()) {
                     addToMyServer(messages, message, token, contactUsername);
                 }
@@ -99,13 +100,17 @@ public class MessageApi {
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
-
+                Log.e("status 2: ", Integer.toString(response.code()));
                 if (response.isSuccessful()) {
+                    Calendar c = Calendar.getInstance();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String strDate = sdf.format(c.getTime());
+                    message.setCreated(strDate);
                     messageDao.insert(message);
                     List<Message> newMessageList = messages.getValue();
                     assert newMessageList != null;
                     newMessageList.add(message);
-                    messages.setValue(newMessageList);
+                    messages.postValue(newMessageList);
                 }
             }
 

@@ -1,33 +1,44 @@
 package com.example.whatsappandroid.activities;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.widget.ImageButton;
-import android.widget.TextView;
 import com.example.whatsappandroid.R;
 import com.example.whatsappandroid.adapters.MessageListAdapter;
 import com.example.whatsappandroid.models.Message;
 import com.example.whatsappandroid.utilities.Info;
 import com.example.whatsappandroid.viewModels.MessagesViewModel;
+import com.example.whatsappandroid.viewModels.UserViewModel;
 
 public class ChatActivity extends AppCompatActivity {
 
     MessagesViewModel messagesViewModel;
+    UserViewModel userViewModel;
     MessageListAdapter adapter;
+    Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         messagesViewModel = new ViewModelProvider(this).get(MessagesViewModel.class);
+        bitmap = null;
         setNicknameHeader();
+        setPictureHeader();
         setMessageList();
         setMessageBar();
+        // setPictureMessage();
     }
 
     private void setMessageBar() {
@@ -53,7 +64,7 @@ public class ChatActivity extends AppCompatActivity {
     private void setMessageList() {
         RecyclerView messagesListRV = findViewById(R.id.message_list_chat);
         messagesListRV.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MessageListAdapter(Info.context);
+        adapter = new MessageListAdapter(Info.context, bitmap);
 
         messagesViewModel.get().observe(this, messages -> {
             adapter.setMessageList(messages);
@@ -68,5 +79,19 @@ public class ChatActivity extends AppCompatActivity {
 
         TextView contactNicknameTV = findViewById(R.id.contact_nickname_chat);
         contactNicknameTV.setText(props.get("contactNickname").toString());
+    }
+
+    private void setPictureHeader() {
+        Intent currentIntent = getIntent();
+        Bundle props = currentIntent.getExtras();
+
+        ImageView contactPictureTV = findViewById(R.id.profile_image_chat);
+        if (userViewModel.getUser(props.get("contactName").toString()) != null) {
+            byte[] picture = userViewModel.getUser(props.get("contactName").toString()).getPicture();
+            if (picture != null) {
+                bitmap = BitmapFactory.decodeByteArray(picture, 0, picture.length);
+                contactPictureTV.setImageBitmap(bitmap);
+            }
+        }
     }
 }

@@ -1,5 +1,15 @@
 package com.example.whatsappandroid.activities.contactsActivity;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -9,17 +19,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.example.whatsappandroid.R;
 import com.example.whatsappandroid.activities.ChatActivity;
 import com.example.whatsappandroid.adapters.ContactListAdapter;
 import com.example.whatsappandroid.utilities.Info;
 import com.example.whatsappandroid.viewModels.ContactsViewModel;
+import com.example.whatsappandroid.viewModels.UserViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class ContactsListFragment extends Fragment {
@@ -27,6 +32,7 @@ public class ContactsListFragment extends Fragment {
     private ContactListAdapter adapter;
     private FloatingActionButton btnAddContact;
     private ContactsViewModel contactsViewModel;
+    private UserViewModel userViewModel;
 
     @Nullable
     @Override
@@ -38,7 +44,10 @@ public class ContactsListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
         contactsViewModel = new ViewModelProvider(requireActivity()).get(ContactsViewModel.class);
+        setNicknameHeader(view);
+        setPictureHeader(view);
         setAddContactBtn(view);
         setAdapter();
         setContactList(view);
@@ -62,8 +71,30 @@ public class ContactsListFragment extends Fragment {
             Intent chatIntent = new Intent(Info.context, ChatActivity.class);
             Info.contactId = contact.getId();
             chatIntent.putExtra("contactNickname", contact.getName());
+            chatIntent.putExtra("contactName", contact.getId());
             startActivity(chatIntent);
         });
+    }
+
+    private void setNicknameHeader(View view) {
+        TextView userNicknameTV = view.findViewById(R.id.user_nickname);
+        if (userViewModel.getUser(Info.loggedUser) == null ||
+                userViewModel.getUser(Info.loggedUser).getNickname() == null) {
+            userNicknameTV.setText(Info.loggedUser);
+        } else {
+            userNicknameTV.setText(userViewModel.getUser(Info.loggedUser).getNickname());
+        }
+    }
+
+    private void setPictureHeader(View view) {
+        ImageView userPictureTV = view.findViewById(R.id.profile_image_user);
+        if (userViewModel.getUser(Info.loggedUser) != null) {
+            byte[] picture = userViewModel.getUser(Info.loggedUser).getPicture();
+            if (picture != null) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(picture, 0, picture.length);
+                userPictureTV.setImageBitmap(bitmap);
+            }
+        }
     }
 
     private void setContactList(View view) {

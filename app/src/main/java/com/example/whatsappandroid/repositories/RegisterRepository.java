@@ -2,15 +2,8 @@ package com.example.whatsappandroid.repositories;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.room.Room;
 
 import com.example.whatsappandroid.api.UserAPI;
-import com.example.whatsappandroid.db.AppDB;
-import com.example.whatsappandroid.db.MessageDao;
-import com.example.whatsappandroid.models.Message;
-import com.example.whatsappandroid.utilities.Info;
-
-import java.util.List;
 
 public class RegisterRepository {
     private UserAPI userAPI;
@@ -28,8 +21,8 @@ public class RegisterRepository {
         }
     }
 
-    public void addUser(String username, String password) {
-        userAPI.addUser(username, password, this.isSucceededData);
+    public void addUser(String username, String password, String nickname, byte[] picture) {
+        userAPI.addUser(username, password, nickname, picture, this.isSucceededData);
     }
 
     public LiveData<Boolean> get() {
