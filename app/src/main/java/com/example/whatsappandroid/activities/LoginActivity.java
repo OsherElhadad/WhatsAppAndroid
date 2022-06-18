@@ -13,13 +13,13 @@ import com.example.whatsappandroid.R;
 import com.example.whatsappandroid.activities.contactsActivity.MainContactsActivity;
 import com.example.whatsappandroid.api.ConnectToFirebaseApi;
 import com.example.whatsappandroid.api.LoginApi;
-import com.example.whatsappandroid.loggable;
+import com.example.whatsappandroid.Successable;
 import com.example.whatsappandroid.utilities.Info;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.iid.FirebaseInstanceId;
 
-public class LoginActivity extends AppCompatActivity implements loggable {
+public class LoginActivity extends AppCompatActivity implements Successable {
     private FloatingActionButton register;
     private Button loginBtn;
     private TextInputLayout usernameTIL;
