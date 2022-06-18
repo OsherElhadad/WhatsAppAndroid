@@ -3,8 +3,11 @@
 # Getting Started
 
 * Make sure you have anroid studio installed on your computer.
+* Start the server on URL - https://github.com/OsherElhadad/WhatsAppApiServerEx3
 * Just clone this repository and you are ready to start! <br>
 In order to open the app, open the cloned project on your andorid studio and click play.
+
+
 
 ## Log-In Activity
 
