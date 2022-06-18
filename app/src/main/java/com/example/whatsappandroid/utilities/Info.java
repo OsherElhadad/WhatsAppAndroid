@@ -2,8 +2,12 @@ package com.example.whatsappandroid.utilities;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
+import android.os.Build;
 
+import androidx.core.app.NotificationManagerCompat;
 import androidx.room.Room;
 
 import com.example.whatsappandroid.db.UsersDB;
@@ -16,6 +20,7 @@ public class Info extends Application {
     public static boolean isLogged;
     public static String contactId;
     public static UsersDB usersDB;
+    public static NotificationManagerCompat notificationManagerCompat;
 
     @Override
     public void onCreate() {
@@ -26,5 +31,28 @@ public class Info extends Application {
         isLogged = false;
         usersDB = Room.databaseBuilder(getApplicationContext(), UsersDB.class, "user")
                 .allowMainThreadQueries().fallbackToDestructiveMigration().build();
+        notificationManagerCompat = NotificationManagerCompat.from(this);
+        createNotificationChannel();
+    }
+
+    public void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "API contacts channel";
+            String description = "channel with the api server for new contacts";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("1", name, importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+
+            name = "API messages channel";
+            description = "channel with the api server for new messages";
+            importance = NotificationManager.IMPORTANCE_DEFAULT;
+            channel = new NotificationChannel("2", name, importance);
+            channel.setDescription(description);
+
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 }

@@ -38,7 +38,6 @@ public class ChatActivity extends AppCompatActivity {
         setPictureHeader();
         setMessageList();
         setMessageBar();
-        // setPictureMessage();
     }
 
     private void setMessageBar() {

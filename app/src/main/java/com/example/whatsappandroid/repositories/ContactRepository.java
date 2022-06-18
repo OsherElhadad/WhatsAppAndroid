@@ -23,6 +23,7 @@ public class ContactRepository {
                      .allowMainThreadQueries().fallbackToDestructiveMigration().build();
         this.contactDao = appDB.contactDao();
         this.contactListData = new ContactListData();
+
         this.contactApi = new ContactApi(this.contactDao);
     }
 
