@@ -4,7 +4,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -21,7 +20,6 @@ public class SettingsFragment extends PreferenceFragment {
         Preference p = findPreference(getString(R.string.mode));
         if (p != null) {
             p.setOnPreferenceChangeListener((preference, newValue) -> {
-                Log.i("newValue", newValue.toString());
                 if (newValue.toString() == "false") {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 } else {

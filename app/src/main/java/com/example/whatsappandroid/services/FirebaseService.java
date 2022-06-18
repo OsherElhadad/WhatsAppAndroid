@@ -24,18 +24,15 @@ public class FirebaseService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
-        Log.d("From", "From: " + remoteMessage.getFrom());
-
-        // Check if message contains a data payload.
         String type = "type";
+
+        // check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
-            Log.d("Data", "Message data payload: " + remoteMessage.getData());
             String typeGot = remoteMessage.getData().get(type);
 
             // if got a new contact message, then show a proper notification
             if (typeGot.compareTo("Contact") == 0) {
                 if (remoteMessage.getNotification() != null) {
-                    Log.d("Body", "Message Notification Body: " + remoteMessage.getNotification().getBody());
                     NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "1")
                             .setSmallIcon(R.drawable.ic_whatsapp)
                             .setContentTitle(remoteMessage.getNotification().getTitle())
@@ -47,7 +44,6 @@ public class FirebaseService extends FirebaseMessagingService {
 
                 // if got a new message message, then show a proper notification
                 if (remoteMessage.getNotification() != null) {
-                    Log.d("Body", "Message Notification Body: " + remoteMessage.getNotification().getBody());
                     NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "2")
                             .setSmallIcon(R.drawable.ic_whatsapp)
                             .setContentTitle("New message")

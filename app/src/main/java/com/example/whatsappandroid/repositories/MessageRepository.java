@@ -63,8 +63,6 @@ public class MessageRepository {
         messageApi.addMessage(this.messagesListData, "Bearer " + Info.loggerUserToken,
                 Info.loggedUser,  this.contactDao.get(Info.contactId).getServer(),
                 Info.contactId, message);
-//        this.messageDao.insert(message);
-//        setMessagesListDataWithDbMessages();
     }
 
     public void delete(Message message) {

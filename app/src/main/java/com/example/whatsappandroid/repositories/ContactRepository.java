@@ -38,8 +38,6 @@ public class ContactRepository {
         protected void onActive() {
             super.onActive();
 
-//            setContactListDataWithDbContacts();
-
             // load contacts from server API
             setContactListDataWithServerAPIContacts();
         }
