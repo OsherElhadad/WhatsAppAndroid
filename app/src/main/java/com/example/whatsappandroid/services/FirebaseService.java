@@ -44,7 +44,7 @@ public class FirebaseService extends FirebaseMessagingService {
                             .setContentText(remoteMessage.getNotification().getBody())
                             .setPriority(NotificationCompat.PRIORITY_DEFAULT);
                     notificationManagerCompat.notify(contactsCounter++, builder.build());
-                    Intent intent = new Intent("notifyContact").putExtra("Contact", "Contact");
+                    Intent intent = new Intent("notifyContact");
                     LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
                 }
             } else if (typeGot.compareTo("Message") == 0) {
@@ -61,7 +61,7 @@ public class FirebaseService extends FirebaseMessagingService {
                                     (remoteMessage.getNotification().getBody()))
                             .setPriority(NotificationCompat.PRIORITY_DEFAULT);
                     notificationManagerCompat.notify(messagesCounter++, builder.build());
-                    Intent intent = new Intent("notifyMessage").putExtra("Message", "Message");
+                    Intent intent = new Intent("notifyMessage");
                     LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
                 }
             }

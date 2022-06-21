@@ -43,7 +43,7 @@ public class MessageRepository {
         }
     }
 
-    protected void setMessagesListDataWithApiServerMessages() {
+    public void setMessagesListDataWithApiServerMessages() {
         this.messageApi.getAllMessages(this.messagesListData,
                 "Bearer " + Info.loggerUserToken, Info.contactId);
     }

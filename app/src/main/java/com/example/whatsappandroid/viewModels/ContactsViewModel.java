@@ -36,4 +36,8 @@ public class ContactsViewModel extends ViewModel {
     public void reload() {
         contactRepository.reload();
     }
+
+    public void refresh() {
+        contactRepository.setContactListDataWithServerAPIContacts();
+    }
 }

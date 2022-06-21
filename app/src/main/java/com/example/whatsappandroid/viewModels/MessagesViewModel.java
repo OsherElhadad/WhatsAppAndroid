@@ -32,5 +32,9 @@ public class MessagesViewModel extends ViewModel{
     public void reload() {
         messageRepository.reload();
     }
+
+    public void refresh() {
+        messageRepository.setMessagesListDataWithApiServerMessages();
+    }
 }
 

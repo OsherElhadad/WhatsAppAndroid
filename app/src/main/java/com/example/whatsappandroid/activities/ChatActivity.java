@@ -44,13 +44,13 @@ public class ChatActivity extends AppCompatActivity {
         setMessageBar();
 
         IntentFilter intentFilter = new IntentFilter("notifyMessage");
-        LocalBroadcastManager.getInstance(this).registerReceiver(handleNotifyNewMessage, intentFilter);
+        LocalBroadcastManager.getInstance(Info.context).registerReceiver(handleNotifyNewMessage, intentFilter);
     }
 
     private final BroadcastReceiver handleNotifyNewMessage = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            setMessageList();
+            messagesViewModel.refresh();
         }
     };
 

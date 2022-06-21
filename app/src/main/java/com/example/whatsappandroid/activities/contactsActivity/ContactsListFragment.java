@@ -65,7 +65,7 @@ public class ContactsListFragment extends Fragment {
     private final BroadcastReceiver handleNotifyNewContact = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            setContactList(_view);
+            contactsViewModel.refresh();
         }
     };
 

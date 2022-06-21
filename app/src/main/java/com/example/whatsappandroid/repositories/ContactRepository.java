@@ -43,7 +43,7 @@ public class ContactRepository {
         }
     }
 
-    protected void setContactListDataWithServerAPIContacts() {
+    public void setContactListDataWithServerAPIContacts() {
         this.contactApi.getAllContacts(this.contactListData, "Bearer " + Info.loggerUserToken);
     }
 
