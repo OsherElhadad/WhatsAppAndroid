@@ -4,10 +4,10 @@
 
 * Make sure you have anroid studio installed on your computer.
 * Start the server on URL - https://github.com/OsherElhadad/WhatsAppApiServerEx3
-* Just clone this repository and you are ready to start! <br>
+* Clone this repository. <br>
 * Open the cloned project on your andorid studio and connect to firebase (Tools -> Firebase -> Cloud messaging -> Connect to firebase with:
   gmail user- osheryossi1@gmail.com, password- 12123344)
-In order to open the app, open the cloned project on your andorid studio and click play.
+* In order to open the app, open the cloned project on your andorid studio and click play.
 
 
 
