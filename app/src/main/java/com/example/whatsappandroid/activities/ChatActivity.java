@@ -1,6 +1,9 @@
 package com.example.whatsappandroid.activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -10,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,7 +42,17 @@ public class ChatActivity extends AppCompatActivity {
         setPictureHeader();
         setMessageList();
         setMessageBar();
+
+        IntentFilter intentFilter = new IntentFilter("notifyMessage");
+        LocalBroadcastManager.getInstance(this).registerReceiver(handleNotifyNewMessage, intentFilter);
     }
+
+    private final BroadcastReceiver handleNotifyNewMessage = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            setMessageList();
+        }
+    };
 
     private void setMessageBar() {
         ImageButton sendBtn = findViewById(R.id.send_msg_btn_chat);
