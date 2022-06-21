@@ -68,10 +68,9 @@ public class ContactApi {
 
     public void addContact(Contact contact, String username, String token,
                            MutableLiveData<List<Contact>> contacts) {
-        Invitation invitation = new Invitation(username, contact.getId(),
-                "localhost:" + R.string.myServerPort);
+        Invitation invitation = new Invitation(username, contact.getId(), "localhost:5146");
         Retrofit contactRetrofit = new Retrofit.Builder()
-                .baseUrl(Info.context.getString(R.string.http_request) + R.string.android_local + ":" +
+                .baseUrl(Info.context.getString(R.string.http_request) + "10.0.2.2" + ":" +
                         contact.getServerPort() + "/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();

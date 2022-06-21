@@ -69,7 +69,7 @@ public class MessageApi {
                            String contactServerPort, String contactUsername, Message message) {
         Transfer transfer = new Transfer(username, contactUsername, message.getContent());
         Retrofit contactRetrofit = new Retrofit.Builder()
-                .baseUrl(Info.context.getString(R.string.http_request) + R.string.android_local + ":" +
+                .baseUrl(Info.context.getString(R.string.http_request) + "10.0.2.2" + ":" +
                         contactServerPort + "/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
