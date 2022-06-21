@@ -26,4 +26,6 @@
     <string name="BasicPort">BasicPort</string>
     <string name="summary_port">Default server port</string>
     <string name="title_port">Server Port</string>
+    <string name="my_server_name">localhost:5146</string>
+    <string name="android_local">10.0.2.2</string>
 </resources>

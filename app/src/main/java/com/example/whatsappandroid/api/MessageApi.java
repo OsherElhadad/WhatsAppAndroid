@@ -66,11 +66,11 @@ public class MessageApi {
     }
 
     public void addMessage(MutableLiveData<List<Message>> messages, String token, String username,
-                           String contactServer, String contactUsername, Message message) {
+                           String contactServerPort, String contactUsername, Message message) {
         Transfer transfer = new Transfer(username, contactUsername, message.getContent());
         Retrofit contactRetrofit = new Retrofit.Builder()
-                .baseUrl(Info.context.getString(R.string.http_request) +
-                        contactServer + "/")
+                .baseUrl(Info.context.getString(R.string.http_request) + R.string.android_local + ":" +
+                        contactServerPort + "/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         WebServiceAPI contactServerApi = contactRetrofit.create(WebServiceAPI.class);
