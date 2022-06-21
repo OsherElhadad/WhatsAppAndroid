@@ -1,6 +1,9 @@
 package com.example.whatsappandroid.activities.contactsActivity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -16,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,6 +37,7 @@ public class ContactsListFragment extends Fragment {
     private FloatingActionButton btnAddContact;
     private ContactsViewModel contactsViewModel;
     private UserViewModel userViewModel;
+    private View _view;
 
     @Nullable
     @Override
@@ -44,6 +49,7 @@ public class ContactsListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        _view = view;
         userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
         contactsViewModel = new ViewModelProvider(requireActivity()).get(ContactsViewModel.class);
         setNicknameHeader(view);
@@ -51,7 +57,17 @@ public class ContactsListFragment extends Fragment {
         setAddContactBtn(view);
         setAdapter();
         setContactList(view);
+
+        IntentFilter intentFilter = new IntentFilter("notifyContact");
+        LocalBroadcastManager.getInstance(Info.context).registerReceiver(handleNotifyNewContact, intentFilter);
     }
+
+    private final BroadcastReceiver handleNotifyNewContact = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            setContactList(_view);
+        }
+    };
 
     private void setAddContactBtn(View view) {
         btnAddContact = view.findViewById(R.id.btnAddContact);
