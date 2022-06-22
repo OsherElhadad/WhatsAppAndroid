@@ -102,8 +102,7 @@ public class RegisterActivity extends AppCompatActivity implements Successable {
         passwordTIL.getEditText().setText("");
         repeatPasswordTIL.getEditText().setText("");
         nicknameTIL.getEditText().setText("");
-        viewImage.setImageBitmap(BitmapFactory.decodeResource(getResources(),
-                R.drawable.ic_default_profile_pid));
+        viewImage.setImageResource(R.drawable.ic_default_profile_pid);
     }
 
     private void setListeners() {
