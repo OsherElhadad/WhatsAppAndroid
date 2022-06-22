@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.whatsappandroid.db.UserDao;
 import com.example.whatsappandroid.models.User;
+import com.example.whatsappandroid.successables.Successable;
 import com.example.whatsappandroid.utilities.Info;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -22,6 +23,7 @@ public class UserAPI {
     private UserDao userDao;
     Retrofit retrofit;
     WebServiceAPI webServiceAPI;
+    Successable successable;
 
     public UserAPI() {
         Gson gson = new GsonBuilder().setLenient().create();
@@ -34,8 +36,11 @@ public class UserAPI {
         webServiceAPI = retrofit.create(WebServiceAPI.class);
     }
 
-    public void addUser(String username, String password, String nickname, byte[] picture,
-                        MutableLiveData<Boolean> isSucceededData) {
+    public void setSuccessable(Successable successable) {
+        this.successable = successable;
+    }
+
+    public void addUser(String username, String password, String nickname, byte[] picture) {
         User user = new User(username, password);
         Call<JsonPrimitive> call = webServiceAPI.postUser(user);
         call.enqueue(new Callback<JsonPrimitive>() {
@@ -49,14 +54,15 @@ public class UserAPI {
                     Info.loggerUserToken = token.substring(1, token.length() - 1);
                     User user = new User(username, password, nickname, picture);
                     userDao.insert(user);
-                    isSucceededData.setValue(false);
-                    isSucceededData.setValue(true);
+                    successable.onSuccess();
+                } else {
+                    successable.onFail();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<JsonPrimitive> call, @NonNull Throwable t) {
-                isSucceededData.setValue(false);
+                successable.onFail();
             }
         });
     }

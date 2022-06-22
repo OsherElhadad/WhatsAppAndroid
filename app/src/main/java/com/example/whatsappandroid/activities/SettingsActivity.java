@@ -8,7 +8,6 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.whatsappandroid.R;
-import com.example.whatsappandroid.SettingsFragment;
 
 public class SettingsActivity extends AppCompatActivity {
 

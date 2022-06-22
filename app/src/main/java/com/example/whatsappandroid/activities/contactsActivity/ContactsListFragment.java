@@ -59,7 +59,8 @@ public class ContactsListFragment extends Fragment {
         setContactList(view);
 
         IntentFilter intentFilter = new IntentFilter("notifyContact");
-        LocalBroadcastManager.getInstance(Info.context).registerReceiver(handleNotifyNewContact, intentFilter);
+        LocalBroadcastManager.getInstance(Info.context)
+                .registerReceiver(handleNotifyNewContact, intentFilter);
     }
 
     private final BroadcastReceiver handleNotifyNewContact = new BroadcastReceiver() {

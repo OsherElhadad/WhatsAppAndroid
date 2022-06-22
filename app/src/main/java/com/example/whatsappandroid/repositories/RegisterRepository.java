@@ -4,28 +4,22 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.whatsappandroid.api.UserAPI;
+import com.example.whatsappandroid.successables.Successable;
 
 public class RegisterRepository {
     private UserAPI userAPI;
-    private isSucceededData isSucceededData;
 
     public RegisterRepository() {
-        this.isSucceededData = new isSucceededData();
         this.userAPI = new UserAPI();
     }
 
-    class isSucceededData extends MutableLiveData<Boolean> {
-        public isSucceededData() {
-            super();
-            setValue(false);
-        }
+
+    public void setSuccessable(Successable successable) {
+        this.userAPI.setSuccessable(successable);
     }
 
     public void addUser(String username, String password, String nickname, byte[] picture) {
-        userAPI.addUser(username, password, nickname, picture, this.isSucceededData);
+        userAPI.addUser(username, password, nickname, picture);
     }
 
-    public LiveData<Boolean> get() {
-        return isSucceededData;
-    }
 }

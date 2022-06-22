@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.whatsappandroid.R;
-import com.example.whatsappandroid.Successable;
+import com.example.whatsappandroid.successables.Successable;
 import com.example.whatsappandroid.db.ContactDao;
 import com.example.whatsappandroid.models.Contact;
 import com.example.whatsappandroid.models.Invitation;
@@ -84,14 +84,14 @@ public class ContactApi {
                         // send after invitation, post for the contact
                         addToMyServer(contact, token, contacts);
                     } else if(successable != null){
-                        successable.onFailedLogin();
+                        successable.onFail();
                     }
             }
 
             @Override
             public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
                 if(successable != null) {
-                    successable.onFailedLogin();
+                    successable.onFail();
                 }
             }
         });
@@ -107,20 +107,20 @@ public class ContactApi {
                     if (response.isSuccessful()) {
 
                         // add the new contact to the list of contacts
-                        successable.onSuccessfulLogin();
+                        successable.onSuccess();
                         contactDao.insert(contact);
                         List<Contact> newContacts = contacts.getValue();
                         newContacts.add(contact);
                         contacts.postValue(newContacts);
                     } else if(successable != null) {
-                        successable.onFailedLogin();
+                        successable.onFail();
                     }
             }
 
             @Override
             public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
                 if(successable != null) {
-                    successable.onFailedLogin();
+                    successable.onFail();
                 }
             }
         });

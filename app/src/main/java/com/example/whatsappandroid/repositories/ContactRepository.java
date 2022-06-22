@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.Room;
 
-import com.example.whatsappandroid.Successable;
+import com.example.whatsappandroid.successables.Successable;
 import com.example.whatsappandroid.api.ContactApi;
 import com.example.whatsappandroid.db.AppDB;
 import com.example.whatsappandroid.db.ContactDao;
@@ -44,7 +44,8 @@ public class ContactRepository {
     }
 
     public void setContactListDataWithServerAPIContacts() {
-        this.contactApi.getAllContacts(this.contactListData, "Bearer " + Info.loggerUserToken);
+        this.contactApi.getAllContacts(this.contactListData,
+                "Bearer " + Info.loggerUserToken);
     }
 
 

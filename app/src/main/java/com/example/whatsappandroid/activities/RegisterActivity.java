@@ -23,6 +23,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.whatsappandroid.R;
 import com.example.whatsappandroid.activities.contactsActivity.MainContactsActivity;
 import com.example.whatsappandroid.api.ConnectToFirebaseApi;
+import com.example.whatsappandroid.successables.Successable;
 import com.example.whatsappandroid.utilities.Info;
 import com.example.whatsappandroid.viewModels.RegisterViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -32,7 +33,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import java.io.ByteArrayOutputStream;
 import java.util.regex.Pattern;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity implements Successable {
     private RegisterViewModel registerViewModel;
     private Bitmap picture;
     private ImageView viewImage;
@@ -60,35 +61,42 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
         picture = null;
         registerViewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
-
-        registerViewModel.get().observe(this, isSucceeded -> {
-            if (isSucceeded) {
-                String input = "Welcome " + username + "!";
-                Toast.makeText(this, input, Toast.LENGTH_SHORT).show();
-
-                // if registered successfully then we send to the server his token.
-                ConnectToFirebaseApi connectToFirebaseApi = new ConnectToFirebaseApi();
-                FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(RegisterActivity.this,
-                        instanceIdResult -> {
-                            fbToken = instanceIdResult.getToken();
-                        });
-                fbToken = FirebaseInstanceId.getInstance().getToken();
-                connectToFirebaseApi.connectToFB(username, fbToken);
-                Intent contactsListIntent = new Intent(this, MainContactsActivity.class);
-
-                // pass username to the contacts list screen
-                Info.loggedUser = username;
-                startActivity(contactsListIntent);
-            }
-        });
-
+        registerViewModel.setSuccessable(this);
         findViews();
         setListeners();
     }
 
+    @Override
+    public void onSuccess() {
+        String input = "Welcome " + username + "!";
+        Toast.makeText(this, input, Toast.LENGTH_SHORT).show();
+
+        // if registered successfully then we send to the server his token.
+        ConnectToFirebaseApi connectToFirebaseApi = new ConnectToFirebaseApi();
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnSuccessListener(RegisterActivity.this,
+                        instanceIdResult -> {
+                            fbToken = instanceIdResult.getToken();
+                        });
+        fbToken = FirebaseInstanceId.getInstance().getToken();
+        connectToFirebaseApi.connectToFB(username, fbToken);
+        Intent contactsListIntent = new Intent(this,
+                MainContactsActivity.class);
+
+        // pass username to the contacts list screen
+        Info.loggedUser = username;
+        startActivity(contactsListIntent);
+    }
+
+    @Override
+    public void onFail() {
+        String input = "Something went wrong! please try again!";
+        Toast.makeText(this, input, Toast.LENGTH_SHORT).show();
+    }
+
     private void setListeners() {
         registerBtn.setOnClickListener(v -> {
-            if(confirmInput() == 1) {
+            if (confirmInput() == 1) {
 
                 // pass to the viewmodel the username password nickname and picture if has
                 byte[] byteArrayPic = null;
@@ -97,10 +105,7 @@ public class RegisterActivity extends AppCompatActivity {
                     picture.compress(Bitmap.CompressFormat.PNG, 100, baos);
                     byteArrayPic = baos.toByteArray();
                 }
-                registerViewModel.registerUser(usernameTIL.getEditText().getText().toString().trim(),
-                        passwordTIL.getEditText().getText().toString().trim(),
-                        nicknameTIL.getEditText().getText().toString().trim(),
-                        byteArrayPic);
+                registerViewModel.registerUser(username, password, nickname, byteArrayPic);
             }
         });
 
@@ -136,8 +141,7 @@ public class RegisterActivity extends AppCompatActivity {
         b.setOnClickListener(v -> selectImage());
 
         loginBtn.setOnClickListener(v -> {
-            Intent loginIntent = new Intent(this, LoginActivity.class);
-            startActivity(loginIntent);
+            finish();
         });
     }
 
@@ -164,11 +168,15 @@ public class RegisterActivity extends AppCompatActivity {
             if (options[item].equals("Take Photo")) {
                 try {
                     Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 100);
-                        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(this,
+                                new String[]{Manifest.permission.CAMERA}, 100);
+                        if (ActivityCompat.checkSelfPermission(this,
+                                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                             tv.setVisibility(View.VISIBLE);
-                            tv.setText("Please allow this app permissions to files (gallery) and camera");
+                            tv.setText("Please allow this app permissions" +
+                                    "to files (gallery) and camera");
                         } else {
                             tv.setVisibility(View.INVISIBLE);
                             startActivityForResult(takePictureIntent, 1);
@@ -181,21 +189,33 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             } else if (options[item].equals("Choose from Gallery")) {
 
-                // if choose 'Choose from Gallery; then ask for permissions to the Files and choose a picture
+                /*
+                * if choose 'Choose from Gallery;
+                * then ask for permissions to the Files and choose a picture
+                */
                 try {
-                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-                        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(this,
+                            Manifest.permission.READ_EXTERNAL_STORAGE)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(this,
+                                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+                                        Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                        if (ActivityCompat.checkSelfPermission(this,
+                                Manifest.permission.READ_EXTERNAL_STORAGE)
+                                != PackageManager.PERMISSION_GRANTED) {
                             tv.setVisibility(View.VISIBLE);
-                            tv.setText("Please allow this app permissions to files (gallery) and camera");
+                            tv.setText("Please allow this app permissions " +
+                                    "to files (gallery) and camera");
                         } else {
-                            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            Intent intent = new Intent(Intent.ACTION_PICK,
+                                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                             intent.setType("image/*");
                             tv.setVisibility(View.INVISIBLE);
                             startActivityForResult(intent, 2);
                         }
                     } else {
-                        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        Intent intent = new Intent(Intent.ACTION_PICK,
+                                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                         intent.setType("image/*");
                         tv.setVisibility(View.INVISIBLE);
                         startActivityForResult(intent, 2);
@@ -230,7 +250,8 @@ public class RegisterActivity extends AppCompatActivity {
                 try {
                     Uri selectedImage = data.getData();
                     String[] filePath = {MediaStore.Images.Media.DATA};
-                    Cursor c = getContentResolver().query(selectedImage, filePath, null, null, null);
+                    Cursor c = getContentResolver().query(selectedImage, filePath,
+                            null, null, null);
                     c.moveToFirst();
                     int columnIndex = c.getColumnIndex(filePath[0]);
                     String picturePath = c.getString(columnIndex);

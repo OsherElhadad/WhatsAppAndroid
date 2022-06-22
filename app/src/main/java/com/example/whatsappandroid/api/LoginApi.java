@@ -2,7 +2,7 @@ package com.example.whatsappandroid.api;
 
 import androidx.annotation.NonNull;
 
-import com.example.whatsappandroid.Successable;
+import com.example.whatsappandroid.successables.Successable;
 import com.example.whatsappandroid.models.Login;
 import com.example.whatsappandroid.utilities.Info;
 import com.google.gson.Gson;
@@ -41,11 +41,11 @@ public class LoginApi {
                 if (response.code() == 200 && response.body() != null) {
                     String token = response.body().toString();
                     Info.loggerUserToken = token.substring(1, token.length() - 1);
-                    successable.onSuccessfulLogin();
+                    successable.onSuccess();
                 } else {
                     Info.loggedUser = null;
                     Info.loggerUserToken = null;
-                    successable.onFailedLogin();
+                    successable.onFail();
                 }
             }
 

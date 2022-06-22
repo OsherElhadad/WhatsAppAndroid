@@ -4,18 +4,17 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.whatsappandroid.repositories.RegisterRepository;
+import com.example.whatsappandroid.successables.Successable;
 
 public class RegisterViewModel extends ViewModel {
     private RegisterRepository registerRepository;
-    private LiveData<Boolean> isSucceeded;
 
     public RegisterViewModel() {
         this.registerRepository = new RegisterRepository();
-        this.isSucceeded = registerRepository.get();
     }
 
-    public LiveData<Boolean> get() {
-        return isSucceeded;
+    public void setSuccessable(Successable successable) {
+        this.registerRepository.setSuccessable(successable);
     }
 
     public void registerUser(String username, String password, String nickname, byte[] picture) {

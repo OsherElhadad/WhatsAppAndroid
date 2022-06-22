@@ -13,7 +13,7 @@ import com.example.whatsappandroid.R;
 import com.example.whatsappandroid.activities.contactsActivity.MainContactsActivity;
 import com.example.whatsappandroid.api.ConnectToFirebaseApi;
 import com.example.whatsappandroid.api.LoginApi;
-import com.example.whatsappandroid.Successable;
+import com.example.whatsappandroid.successables.Successable;
 import com.example.whatsappandroid.utilities.Info;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
@@ -105,16 +105,17 @@ public class LoginActivity extends AppCompatActivity implements Successable {
         loginApi.loginToServer(username, password);
     }
 
-    public void onSuccessfulLogin() {
+    public void onSuccess() {
         Toast.makeText(this, "Welcome again " + Info.loggedUser + "!",
                 Toast.LENGTH_SHORT).show();
 
         // if logged in successfully then we send to the server his token.
         ConnectToFirebaseApi connectToFirebaseApi = new ConnectToFirebaseApi();
-        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(LoginActivity.this,
-                instanceIdResult -> {
-                    fbToken = instanceIdResult.getToken();
-                });
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnSuccessListener(LoginActivity.this,
+                        instanceIdResult -> {
+                            fbToken = instanceIdResult.getToken();
+                        });
         fbToken = FirebaseInstanceId.getInstance().getToken();
         connectToFirebaseApi.connectToFB(Info.loggedUser, fbToken);
         Intent contactsListIntent = new Intent(this, MainContactsActivity.class);
@@ -122,7 +123,7 @@ public class LoginActivity extends AppCompatActivity implements Successable {
     }
 
     @Override
-    public void onFailedLogin() {
+    public void onFail() {
         Toast.makeText(Info.context, "Something went wrong :(", Toast.LENGTH_SHORT).show();
     }
 }

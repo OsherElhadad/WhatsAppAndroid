@@ -3,7 +3,7 @@ package com.example.whatsappandroid.viewModels;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.whatsappandroid.Successable;
+import com.example.whatsappandroid.successables.Successable;
 import com.example.whatsappandroid.models.Contact;
 import com.example.whatsappandroid.repositories.ContactRepository;
 

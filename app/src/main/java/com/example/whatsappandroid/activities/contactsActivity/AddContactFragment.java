@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.whatsappandroid.R;
-import com.example.whatsappandroid.Successable;
+import com.example.whatsappandroid.successables.Successable;
 import com.example.whatsappandroid.models.Contact;
 import com.example.whatsappandroid.utilities.Info;
 import com.example.whatsappandroid.viewModels.ContactsViewModel;
@@ -121,14 +121,14 @@ public class AddContactFragment extends Fragment implements Successable {
     }
 
     @Override
-    public void onSuccessfulLogin() {
+    public void onSuccess() {
         String input = "Contact " + contactNickname + " added successfully!";
         Toast.makeText(getActivity(), input, Toast.LENGTH_SHORT).show();
         getActivity().onBackPressed();
     }
 
     @Override
-    public void onFailedLogin() {
+    public void onFail() {
         String input = "Something went wrong! :(";
         Toast.makeText(getActivity(), input, Toast.LENGTH_SHORT).show();
         getActivity().onBackPressed();

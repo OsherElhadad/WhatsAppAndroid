@@ -44,7 +44,8 @@ public class ChatActivity extends AppCompatActivity {
         setMessageBar();
 
         IntentFilter intentFilter = new IntentFilter("notifyMessage");
-        LocalBroadcastManager.getInstance(Info.context).registerReceiver(handleNotifyNewMessage, intentFilter);
+        LocalBroadcastManager.getInstance(Info.context)
+                .registerReceiver(handleNotifyNewMessage, intentFilter);
     }
 
     private final BroadcastReceiver handleNotifyNewMessage = new BroadcastReceiver() {
@@ -65,7 +66,8 @@ public class ChatActivity extends AppCompatActivity {
 
             // set the textbox to be null
             messageET.setText("");
-            Message message = new Message(content, null, true, Info.contactId, Info.loggedUser);
+            Message message = new Message(content, null, true,
+                    Info.contactId, Info.loggedUser);
             messagesViewModel.add(message);
 
         });
@@ -99,7 +101,8 @@ public class ChatActivity extends AppCompatActivity {
         // check if this contact is in our room db as a user and get his picture
         ImageView contactPictureTV = findViewById(R.id.profile_image_chat);
         if (userViewModel.getUser(props.get("contactName").toString()) != null) {
-            byte[] picture = userViewModel.getUser(props.get("contactName").toString()).getPicture();
+            byte[] picture = userViewModel.getUser(props.get("contactName")
+                    .toString()).getPicture();
             if (picture != null) {
                 bitmap = BitmapFactory.decodeByteArray(picture, 0, picture.length);
                 contactPictureTV.setImageBitmap(bitmap);

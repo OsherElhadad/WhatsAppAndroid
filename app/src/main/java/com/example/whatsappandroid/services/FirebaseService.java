@@ -17,6 +17,7 @@ public class FirebaseService extends FirebaseMessagingService {
     private NotificationManagerCompat notificationManagerCompat;
     private int contactsCounter;
     private int messagesCounter;
+
     public FirebaseService() {
         notificationManagerCompat = Info.notificationManagerCompat;
         contactsCounter = 1;
@@ -38,14 +39,16 @@ public class FirebaseService extends FirebaseMessagingService {
                 if (remoteMessage.getNotification() != null &&
                         (Info.loggedUser == null || Info.loggedUser.length() == 0 ||
                                 userGot.compareTo(Info.loggedUser) == 0)) {
-                    NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "1")
+                    NotificationCompat.Builder builder = new NotificationCompat
+                            .Builder(this, "1")
                             .setSmallIcon(R.drawable.ic_whatsapp)
                             .setContentTitle(remoteMessage.getNotification().getTitle())
                             .setContentText(remoteMessage.getNotification().getBody())
                             .setPriority(NotificationCompat.PRIORITY_DEFAULT);
                     notificationManagerCompat.notify(contactsCounter++, builder.build());
                     Intent intent = new Intent("notifyContact");
-                    LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+                    LocalBroadcastManager.getInstance(getApplicationContext())
+                            .sendBroadcast(intent);
                 }
             } else if (typeGot.compareTo("Message") == 0) {
 
@@ -53,7 +56,8 @@ public class FirebaseService extends FirebaseMessagingService {
                 if (remoteMessage.getNotification() != null &&
                         (Info.loggedUser == null || Info.loggedUser.length() == 0 ||
                                 userGot.compareTo(Info.loggedUser) == 0)) {
-                    NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "2")
+                    NotificationCompat.Builder builder = new NotificationCompat
+                            .Builder(this, "2")
                             .setSmallIcon(R.drawable.ic_whatsapp)
                             .setContentTitle("New message")
                             .setContentText(remoteMessage.getNotification().getTitle())

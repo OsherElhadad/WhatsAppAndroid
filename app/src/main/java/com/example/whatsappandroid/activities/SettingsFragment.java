@@ -1,4 +1,4 @@
-package com.example.whatsappandroid;
+package com.example.whatsappandroid.activities;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -8,6 +8,7 @@ import android.preference.PreferenceFragment;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import com.example.whatsappandroid.R;
 import com.example.whatsappandroid.utilities.Info;
 
 @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
