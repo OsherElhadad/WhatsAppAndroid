@@ -38,15 +38,13 @@ Fields requirement in-depth:
   
   
 ## Add Contact Activity
- 
  * You can add a contact by filling the desigred contact username, nickname and server.
  * Note that the contact server should be in localhost:<port> formant and not 10.0.2.2:<port> format.
-  
   
 ## Chat Activity
 * You can send text messages by clicking on send button. You can't send an empty message.
   
 ## Settings Activity
-  In this activity - 
+In this activity - 
 * You can set the theme to light or dark.
 * You can see and change the server and the port.
