@@ -46,7 +46,7 @@ Fields requirement in-depth:
 ## Chat Activity
 * You can send text messages by clicking on send button. You can't send an empty message.
   
-  ## Settings Activity
+## Settings Activity
   In this activity - 
 * You can set the theme to light or dark.
 * You can see and change the server and the port.
