@@ -85,13 +85,25 @@ public class RegisterActivity extends AppCompatActivity implements Successable {
 
         // pass username to the contacts list screen
         Info.loggedUser = username;
+        clearTextBoxes();
         startActivity(contactsListIntent);
     }
 
     @Override
     public void onFail() {
+        clearTextBoxes();
         String input = "Something went wrong! please try again!";
         Toast.makeText(this, input, Toast.LENGTH_SHORT).show();
+    }
+
+    // clear user's input
+    protected void clearTextBoxes() {
+        usernameTIL.getEditText().setText("");
+        passwordTIL.getEditText().setText("");
+        repeatPasswordTIL.getEditText().setText("");
+        nicknameTIL.getEditText().setText("");
+        viewImage.setImageBitmap(BitmapFactory.decodeResource(getResources(),
+                R.drawable.ic_default_profile_pid));
     }
 
     private void setListeners() {

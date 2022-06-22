@@ -69,9 +69,7 @@ public class ChatActivity extends AppCompatActivity {
             Message message = new Message(content, null, true,
                     Info.contactId, Info.loggedUser);
             messagesViewModel.add(message);
-
         });
-
     }
 
     private void setMessageList() {

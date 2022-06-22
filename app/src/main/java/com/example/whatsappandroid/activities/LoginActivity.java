@@ -119,11 +119,18 @@ public class LoginActivity extends AppCompatActivity implements Successable {
         fbToken = FirebaseInstanceId.getInstance().getToken();
         connectToFirebaseApi.connectToFB(Info.loggedUser, fbToken);
         Intent contactsListIntent = new Intent(this, MainContactsActivity.class);
+        clearTextBoxes();
         startActivity(contactsListIntent);
     }
 
     @Override
     public void onFail() {
+        clearTextBoxes();
         Toast.makeText(Info.context, "Something went wrong :(", Toast.LENGTH_SHORT).show();
+    }
+
+    protected void clearTextBoxes() {
+        usernameTIL.getEditText().setText("");
+        passwordTIL.getEditText().setText("");
     }
 }
