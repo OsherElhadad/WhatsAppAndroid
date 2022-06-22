@@ -10,12 +10,12 @@
 * In order to open the app, open the cloned project on your andorid studio and click play.
 
 
-
 ## Log-In Activity
 
 * This is the home activity which allows you to log-in to the system and start chatting with your friends!
 * In case you are not already signed, you can click the round button below the log-in button and sign-up.
 * When successfully logged-in, you will be navigated to the contact list screen.
+* On the left top corener you have a settings button to nevigate to it's activity.
 
 ## Sign-Up Activity
 
@@ -23,6 +23,7 @@
 * The username, password and verfiy password fields are requierd in order to sign up and profile picture is optional. In case one of the mentioned is empty or invalid(will be explanied in a bit), the system won't allow you to sign-up.
 * While typing in the input fields you will notice a dynamic message below the relavent field. In case the current input is invalid, a red border will aprear with a X sign and a message to indicate the specific problem with the input.
 * You may also add profile picture by clicking on the "select photo" button. You can take a picture or choose an existing one from your gallery.
+* On the left top corener you have a settings button to nevigate to it's activity.
 
 Fields requirement in-depth:
 - Username must be one word with length greater or equals to 2, without '-' or '_' characters.
@@ -39,7 +40,13 @@ Fields requirement in-depth:
 ## Add Contact Activity
  
  * You can add a contact by filling the desigred contact username, nickname and server.
+ * Note that the contact server should be in localhost:<port> formant and not 10.0.2.2:<port> format.
   
   
 ## Chat Activity
 * You can send text messages by clicking on send button. You can't send an empty message.
+  
+  ## Settings Activity
+  In this activity - 
+* You can set the theme to light or dark.
+* You can see and change the server and the port.
